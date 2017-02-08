@@ -10,27 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170208000933) do
-
-  create_table "interviewees", force: :cascade do |t|
-    t.integer  "interview_id"
-    t.string   "name"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
-    t.index ["interview_id"], name: "index_interviewees_on_interview_id"
-  end
-
-  create_table "interviewers", force: :cascade do |t|
-    t.integer  "interview_id"
-    t.string   "name"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
-    t.index ["interview_id"], name: "index_interviewers_on_interview_id"
-  end
+ActiveRecord::Schema.define(version: 20170208002004) do
 
   create_table "interviews", force: :cascade do |t|
     t.integer  "record_id"
     t.datetime "date"
+    t.string   "length"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["record_id"], name: "index_interviews_on_record_id"
@@ -46,22 +31,27 @@ ActiveRecord::Schema.define(version: 20170208000933) do
     t.text     "citation"
     t.text     "related_record_stmt"
     t.text     "identification_stmt"
-    t.string   "summary_by"
     t.datetime "summary_date"
-    t.string   "cataloged_by"
     t.datetime "cataloged_date"
-    t.string   "input_by"
     t.datetime "input_date"
-    t.string   "edited_by"
     t.datetime "edited_date"
-    t.string   "corrected_by"
     t.datetime "corrected_date"
-    t.string   "produced_by"
     t.datetime "produced_date"
     t.boolean  "has_mrc",             default: false
     t.boolean  "has_paradox",         default: false
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
+  end
+
+  create_table "roles", force: :cascade do |t|
+    t.integer  "record_id"
+    t.integer  "interview_id"
+    t.string   "type"
+    t.string   "name"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.index ["interview_id"], name: "index_roles_on_interview_id"
+    t.index ["record_id"], name: "index_roles_on_record_id"
   end
 
 end

@@ -3,6 +3,7 @@ class CreateInterviews < ActiveRecord::Migration[5.0]
     create_table :interviews do |t|
       t.references :record, index: true
       t.datetime   :date
+      t.string     :length
       t.timestamps
     end
   end
