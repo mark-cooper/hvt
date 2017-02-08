@@ -10,15 +10,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170208002004) do
+ActiveRecord::Schema.define(version: 20170208005825) do
 
   create_table "interviews", force: :cascade do |t|
     t.integer  "record_id"
     t.datetime "date"
+    t.string   "date_expression"
     t.string   "length"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.index ["record_id"], name: "index_interviews_on_record_id"
+  end
+
+  create_table "proofs", force: :cascade do |t|
+    t.integer  "record_id"
+    t.datetime "date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["record_id"], name: "index_interviews_on_record_id"
+    t.index ["record_id"], name: "index_proofs_on_record_id"
   end
 
   create_table "records", force: :cascade do |t|
@@ -46,11 +55,13 @@ ActiveRecord::Schema.define(version: 20170208002004) do
   create_table "roles", force: :cascade do |t|
     t.integer  "record_id"
     t.integer  "interview_id"
+    t.integer  "proof_id"
     t.string   "type"
     t.string   "name"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
     t.index ["interview_id"], name: "index_roles_on_interview_id"
+    t.index ["proof_id"], name: "index_roles_on_proof_id"
     t.index ["record_id"], name: "index_roles_on_record_id"
   end
 

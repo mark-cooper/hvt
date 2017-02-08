@@ -3,6 +3,7 @@ class CreateRoles < ActiveRecord::Migration[5.0]
     create_table :roles do |t|
       t.references :record, index: true
       t.references :interview, index: true
+      t.references :proof, index: true
       t.string     :type
       t.string     :name
       t.timestamps

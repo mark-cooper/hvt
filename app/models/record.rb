@@ -1,5 +1,6 @@
 class Record < ApplicationRecord
   has_many :interviews
+  has_many :proofs
 
   has_one :summarizer
   has_one :cataloger

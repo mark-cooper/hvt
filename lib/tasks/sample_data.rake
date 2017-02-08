@@ -34,12 +34,17 @@ namespace :db do
     })
 
     2.times do
-      i = r.interviews.create!({
+      iview = r.interviews.create!({
         date: random_date(-365),
       })
-      i.interviewees << Interviewee.create(name: Faker::Name.name)
-      i.interviewers << Interviewer.create(name: Faker::Name.name)
-      i.interviewers << Interviewer.create(name: Faker::Name.name)
+      iview.interviewees << Interviewee.create(name: Faker::Name.name)
+      iview.interviewers << Interviewer.create(name: Faker::Name.name)
+      iview.interviewers << Interviewer.create(name: Faker::Name.name)
+    
+      proof = r.proofs.create!({
+        date: random_date(-365),
+      })
+      proof.proofer = Proofer.create(name: Faker::Name.name)
     end
 
     puts 'Populated with sample data!'
