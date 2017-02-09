@@ -74,9 +74,7 @@ module Paradox
   end
 
   def self.get_proof(name, date)
-    proof = nil
-    proof = { name: name, date: date } if name and !name.empty?
-    proof
+    { name: name, date: date } if name and !name.empty?
   end
 
   def self.create_interviews(record, interviews)
@@ -88,17 +86,13 @@ module Paradox
   end
 
   def self.find_agent(name, role = nil)
-    agent  = nil
     role   = role ? role.constantize : Role
     agents = role.where(name: name)
-    agent  = agents.first if agents and agents.count == 1
-    agent
+    agents.first if agents and agents.count == 1
   end
 
   def self.parse_date(date)
-    d = nil
-    d = Date.parse(date) if date and !date.empty?
-    d
+    Date.parse(date) if date and !date.empty?
   end
 
 end
