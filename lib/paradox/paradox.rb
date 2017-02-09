@@ -26,6 +26,8 @@ module Paradox
       
       record.extent         = r[:count]
       record.collection     = r[:collection]
+
+      # these attributes are merged in from 'process' so need to check conservatively
       record.note           = r[:note] if r.has_key? :note
       record.summary_by     = [Paradox.find_agent(r[:summary_by], 'Summarizer')].compact
       record.summary_date   = Paradox.parse_date(r[:summary_date])
