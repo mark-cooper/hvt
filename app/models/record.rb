@@ -1,4 +1,6 @@
 class Record < ApplicationRecord
+  belongs_to :collection
+
   has_many :interviews
   has_many :proofs
   # has_many :tapes

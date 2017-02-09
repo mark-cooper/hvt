@@ -3,25 +3,25 @@ class CreateRecords < ActiveRecord::Migration[5.0]
     create_table :records do |t|
       # id: $910a
       # $910b
-      t.string  :identifier, unique: true
+      t.string     :identifier, unique: true
       # $245[ahc]
-      t.string  :title
+      t.string     :title
       # 'primary' 'Master Count'
-      t.integer :extent
+      t.integer    :extent
       # $300 [physdesc][extent]
-      t.string  :extent_expression
+      t.string     :extent_expression
       # 'primary' 'Collection'
-      t.string  :collection
+      t.references :collection, index:true
       # $520
-      t.text    :abstract
+      t.text       :abstract
       # 'process' 'Notes'
-      t.text    :note
+      t.text       :note
       # $524 [prefercite]
-      t.text    :citation
+      t.text       :citation
       # $544 [relatedmaterial]
-      t.text    :related_record_stmt
+      t.text       :related_record_stmt
       # $562 [relatedmaterial]
-      t.text    :identification_stmt
+      t.text       :identification_stmt
 
       # 'process' table
       t.datetime :summary_date

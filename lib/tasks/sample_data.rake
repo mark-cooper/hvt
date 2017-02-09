@@ -12,7 +12,7 @@ namespace :db do
       title: Faker::Book.title,
       extent: 2,
       extent_expression: '2 videorecordings (43 min. and 1 hr.) : col.',
-      collection: 'Video Collection',
+      collection: Collection.create!(name: 'Video Collection'),
       abstract: Faker::HarryPotter.quote,
       note: 'NOTE!',
       citation: 'CITE ME!',

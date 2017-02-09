@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170209024310) do
+ActiveRecord::Schema.define(version: 20170209231822) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "record_id"
@@ -51,6 +51,12 @@ ActiveRecord::Schema.define(version: 20170209024310) do
     t.index ["type", "name"], name: "index_agents_on_type_and_name", unique: true
   end
 
+  create_table "collections", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "interviews", force: :cascade do |t|
     t.integer  "record_id"
     t.datetime "date"
@@ -74,7 +80,7 @@ ActiveRecord::Schema.define(version: 20170209024310) do
     t.string   "title"
     t.integer  "extent"
     t.string   "extent_expression"
-    t.string   "collection"
+    t.integer  "collection_id"
     t.text     "abstract"
     t.text     "note"
     t.text     "citation"
@@ -90,6 +96,7 @@ ActiveRecord::Schema.define(version: 20170209024310) do
     t.boolean  "has_paradox",         default: false
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
+    t.index ["collection_id"], name: "index_records_on_collection_id"
   end
 
 end

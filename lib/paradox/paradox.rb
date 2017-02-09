@@ -25,7 +25,7 @@ module Paradox
       record = Record.create!(id: id) unless record
       
       record.extent         = r[:count]
-      record.collection     = r[:collection]
+      record.collection     = Paradox.find_or_create_collection!(r[:collection])
 
       # these attributes are merged in from 'process' so need to check conservatively
       record.note           = r[:note] if r.has_key? :note
@@ -89,6 +89,16 @@ module Paradox
     type   = type ? type.constantize : Agent
     agents = type.where(name: name)
     agents.first if agents and agents.count == 1
+  end
+
+  def self.find_or_create_collection!(name)
+    collection = Collection.where(name: name)
+    if collection.any?
+      collection = collection.first
+    else
+      collection = Collection.create!(name: name)
+    end
+    collection
   end
 
   def self.parse_date(date)
