@@ -1,4 +1,5 @@
 # lib/tasks/from_paradox.rake
+require_relative "../paradox/paradox"
 namespace :db do
   desc 'Populate the database from paradox'
   task populate_from_paradox: :environment do
@@ -9,50 +10,38 @@ namespace :db do
       username: ENV.fetch('PARADOX_USER', 'root'),
       password:ENV.fetch('PARADOX_PASS', '123456'),
     )
-    puts "Connected to MySQL!"
 
-    records = {}
-    # record data
-    client.query("SELECT * FROM `primary`").each do |row|
-      puts row
-      id = row["T-number"].to_i
-      next if id == 0
+    records = Hash.new { |hash, key| hash[key] = {} }
+    agents  = []
 
-      records[id] = { record: {}, interviews: [], tapes: [] }
-      break
+    primary          = Paradox::Primary.new(client)
+    primary_records  = primary.query
+
+    process          = Paradox::Process.new(client)
+    process_records  = process.query
+    agents.concat process.agents
+
+    persdata         = Paradox::PersData.new(client)
+    persdata_records = persdata.query
+    # agents.concat persdata.agents
+
+    cassette         = Paradox::Cassette.new(client)
+    cassette_records = cassette.query
+
+    primary_records.keys.each do |id|
+      next unless id == 22
+      records[id][:record] = primary_records[id].first
+      records[id][:record] = records[id][:record].merge(
+        process_records[id].first
+      ) if process_records.has_key? id
+      records[id][:interviews] = persdata_records[id]
+      records[id][:tapes] = cassette_records[id]
     end
 
-    # additional record data
-    client.query("SELECT * FROM `process`").each do |row|
-      puts row
-      id = row["T-number"].to_i
-      next if id == 0
-      break
-    end
-
-    # interviews data
-    client.query("SELECT * FROM `persdata`").each do |row|
-      puts row
-      id = row["T-number"].to_i
-      next if id == 0
-      break
-    end
-
-    # tapes data
-    client.query("SELECT * FROM `cassette`").each do |row|
-      puts row
-      id = row["T-number"].to_i
-      next if id == 0
-
-      records[id][:tapes] << {
-        type:    row["Recording type"],
-        number:  row["Cassette number"].to_i,
-        format:  row["Tape format"],
-        barcode: row["Barcode"],
-      }
-      break
-    end
-
-    puts records
+    puts "Creating agents! #{Time.now}"
+    Paradox.create_agents agents
+    puts "Creating records! #{Time.now}"
+    Paradox.create_records records
+    puts "Database updated from Paradox! #{Time.now}"
   end
 end

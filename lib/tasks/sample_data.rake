@@ -14,6 +14,7 @@ namespace :db do
       extent_expression: '2 videorecordings (43 min. and 1 hr.) : col.',
       collection: 'Video Collection',
       abstract: Faker::HarryPotter.quote,
+      note: 'NOTE!',
       citation: 'CITE ME!',
       related_record_stmt: 'Associated material HVT-3',
       identification_stmt: '3 copies with time coding.',

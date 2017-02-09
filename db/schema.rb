@@ -37,6 +37,7 @@ ActiveRecord::Schema.define(version: 20170208005825) do
     t.string   "extent_expression"
     t.string   "collection"
     t.text     "abstract"
+    t.text     "note"
     t.text     "citation"
     t.text     "related_record_stmt"
     t.text     "identification_stmt"
@@ -63,6 +64,7 @@ ActiveRecord::Schema.define(version: 20170208005825) do
     t.index ["interview_id"], name: "index_roles_on_interview_id"
     t.index ["proof_id"], name: "index_roles_on_proof_id"
     t.index ["record_id"], name: "index_roles_on_record_id"
+    t.index ["type", "name"], name: "index_roles_on_type_and_name", unique: true
   end
 
 end

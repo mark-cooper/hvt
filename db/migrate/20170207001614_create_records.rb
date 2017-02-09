@@ -14,6 +14,8 @@ class CreateRecords < ActiveRecord::Migration[5.0]
       t.string  :collection
       # $520
       t.text    :abstract
+      # 'process' 'Notes'
+      t.text    :note
       # $524 [prefercite]
       t.text    :citation
       # $544 [relatedmaterial]
