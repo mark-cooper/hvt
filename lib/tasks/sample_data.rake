@@ -18,17 +18,17 @@ namespace :db do
       citation: 'CITE ME!',
       related_record_stmt: 'Associated material HVT-3',
       identification_stmt: '3 copies with time coding.',
-      summary_by: Summarizer.create(name: Faker::Name.name),
+      summary_by: [Summarizer.create(name: Faker::Name.name)],
       summary_date: random_date(-365),
-      cataloged_by: Cataloger.create(name: Faker::Name.name),
+      cataloged_by: [Cataloger.create(name: Faker::Name.name)],
       cataloged_date: random_date(-365),
-      input_by: Inputter.create(name: Faker::Name.name),
+      input_by: [Inputter.create(name: Faker::Name.name)],
       input_date: random_date(-365),
-      edited_by: Editor.create(name: Faker::Name.name),
+      edited_by: [Editor.create(name: Faker::Name.name)],
       edited_date: random_date(-365),
-      corrected_by: Corrector.create(name: Faker::Name.name),
+      corrected_by: [Corrector.create(name: Faker::Name.name)],
       corrected_date: random_date(-365),
-      produced_by: Producer.create(name: Faker::Name.name),
+      produced_by: [Producer.create(name: Faker::Name.name)],
       produced_date: random_date(-365),
       has_mrc: true,
       has_paradox: true,
@@ -42,10 +42,10 @@ namespace :db do
       iview.interviewers << Interviewer.create(name: Faker::Name.name)
       iview.interviewers << Interviewer.create(name: Faker::Name.name)
     
-      proof = r.proofs.create!({
+      r.proofs.create!({
+        proofers: [Proofer.create(name: Faker::Name.name)],
         date: random_date(-365),
       })
-      proof.proofer = Proofer.create(name: Faker::Name.name)
     end
 
     puts 'Populated with sample data!'

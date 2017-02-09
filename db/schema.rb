@@ -10,7 +10,38 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170208005825) do
+ActiveRecord::Schema.define(version: 20170209024310) do
+
+  create_table "agents", force: :cascade do |t|
+    t.integer  "record_id"
+    t.integer  "interview_id"
+    t.integer  "proof_id"
+    t.integer  "role_id"
+    t.integer  "cataloger_id"
+    t.integer  "corrector_id"
+    t.integer  "editor_id"
+    t.integer  "inputter_id"
+    t.integer  "producer_id"
+    t.integer  "proofer_id"
+    t.integer  "summarizer_id"
+    t.integer  "interviewee_id"
+    t.integer  "interviewer_id"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+    t.index ["cataloger_id"], name: "index_agents_on_cataloger_id"
+    t.index ["corrector_id"], name: "index_agents_on_corrector_id"
+    t.index ["editor_id"], name: "index_agents_on_editor_id"
+    t.index ["inputter_id"], name: "index_agents_on_inputter_id"
+    t.index ["interview_id"], name: "index_agents_on_interview_id"
+    t.index ["interviewee_id"], name: "index_agents_on_interviewee_id"
+    t.index ["interviewer_id"], name: "index_agents_on_interviewer_id"
+    t.index ["producer_id"], name: "index_agents_on_producer_id"
+    t.index ["proof_id"], name: "index_agents_on_proof_id"
+    t.index ["proofer_id"], name: "index_agents_on_proofer_id"
+    t.index ["record_id"], name: "index_agents_on_record_id"
+    t.index ["role_id"], name: "index_agents_on_role_id"
+    t.index ["summarizer_id"], name: "index_agents_on_summarizer_id"
+  end
 
   create_table "interviews", force: :cascade do |t|
     t.integer  "record_id"
@@ -54,16 +85,10 @@ ActiveRecord::Schema.define(version: 20170208005825) do
   end
 
   create_table "roles", force: :cascade do |t|
-    t.integer  "record_id"
-    t.integer  "interview_id"
-    t.integer  "proof_id"
     t.string   "type"
     t.string   "name"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
-    t.index ["interview_id"], name: "index_roles_on_interview_id"
-    t.index ["proof_id"], name: "index_roles_on_proof_id"
-    t.index ["record_id"], name: "index_roles_on_record_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["type", "name"], name: "index_roles_on_type_and_name", unique: true
   end
 

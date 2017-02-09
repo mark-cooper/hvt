@@ -1,3 +1,4 @@
 class Editor < Role
-  belongs_to :record
+  has_many :agents
+  has_many :records, through: :agents
 end

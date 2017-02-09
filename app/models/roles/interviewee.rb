@@ -1,3 +1,4 @@
 class Interviewee < Role
-  belongs_to :interview
+  has_many :agents
+  has_many :interviews, through: :agents
 end

@@ -27,19 +27,20 @@ module Paradox
       record.extent         = r[:count]
       record.collection     = r[:collection]
       record.note           = r[:note] if r.has_key? :note
-      record.summary_by     = Paradox.find_agent r[:summary_by], 'Summarizer'
+      record.summary_by     = [Paradox.find_agent(r[:summary_by], 'Summarizer')].compact
       record.summary_date   = Paradox.parse_date(r[:summary_date])
-      record.cataloged_by   = Paradox.find_agent r[:cataloged_by], "Cataloger"
+      record.cataloged_by   = [Paradox.find_agent(r[:cataloged_by], "Cataloger")].compact
       record.cataloged_date = Paradox.parse_date(r[:cataloged_date])
-      record.input_by       = Paradox.find_agent r[:input_by], "Inputter"
+      record.input_by       = [Paradox.find_agent(r[:input_by], "Inputter")].compact
       record.input_date     = Paradox.parse_date(r[:input_date])
-      record.edited_by      = Paradox.find_agent r[:edited_by], "Editor"
+      record.edited_by      = [Paradox.find_agent(r[:edited_by], "Editor")].compact
       record.edited_date    = Paradox.parse_date(r[:edited_date])
-      record.corrected_by   = Paradox.find_agent r[:corrected_by], "Corrector"
+      record.corrected_by   = [Paradox.find_agent(r[:corrected_by], "Corrector")].compact
       record.corrected_date = Paradox.parse_date(r[:corrected_date])
-      record.produced_by    = Paradox.find_agent r[:produced_by], "Producer"
+      record.produced_by    = [Paradox.find_agent(r[:produced_by], "Producer")].compact
       record.produced_date  = Paradox.parse_date(r[:produced_date])
 
+      record.has_paradox = true
       record.save
 
       # create proofs
@@ -64,7 +65,7 @@ module Paradox
       proofer = Paradox.find_agent(proof[:name], "Proofer")
       date    = Paradox.parse_date(proof[:date])
       record.proofs.create!({
-        proofer: proofer,
+        proofers: [proofer],
         date: date,
       })
     end

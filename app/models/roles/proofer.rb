@@ -1,3 +1,4 @@
 class Proofer < Role
-  belongs_to :proof
+  has_many :agents
+  has_many :records, through: :agents
 end

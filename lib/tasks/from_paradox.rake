@@ -23,13 +23,12 @@ namespace :db do
 
     persdata         = Paradox::PersData.new(client)
     persdata_records = persdata.query
-    # agents.concat persdata.agents
+    agents.concat persdata.agents
 
     cassette         = Paradox::Cassette.new(client)
     cassette_records = cassette.query
 
     primary_records.keys.each do |id|
-      next unless id == 22
       records[id][:record] = primary_records[id].first
       records[id][:record] = records[id][:record].merge(
         process_records[id].first
