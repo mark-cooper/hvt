@@ -5,6 +5,9 @@ class Record < ApplicationRecord
   has_many :proofs
   # has_many :tapes
 
+  has_many :terms
+  has_many :subjects, through: :terms
+
   has_many :activities
   has_many :summarizers, through: :activities
   has_many :catalogers, through: :activities

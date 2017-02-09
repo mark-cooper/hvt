@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170209231822) do
+ActiveRecord::Schema.define(version: 20170209234244) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "record_id"
@@ -49,6 +49,15 @@ ActiveRecord::Schema.define(version: 20170209231822) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["type", "name"], name: "index_agents_on_type_and_name", unique: true
+  end
+
+  create_table "authorities", force: :cascade do |t|
+    t.string   "type"
+    t.string   "name"
+    t.string   "source"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["type", "name"], name: "index_authorities_on_type_and_name", unique: true
   end
 
   create_table "collections", force: :cascade do |t|
@@ -97,6 +106,22 @@ ActiveRecord::Schema.define(version: 20170209231822) do
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
     t.index ["collection_id"], name: "index_records_on_collection_id"
+  end
+
+  create_table "subjects", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "terms", force: :cascade do |t|
+    t.integer  "record_id"
+    t.integer  "authority_id"
+    t.integer  "subject_id"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.index ["authority_id"], name: "index_terms_on_authority_id"
+    t.index ["record_id"], name: "index_terms_on_record_id"
+    t.index ["subject_id"], name: "index_terms_on_subject_id"
   end
 
 end
