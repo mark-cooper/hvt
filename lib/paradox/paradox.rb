@@ -10,7 +10,7 @@ module Paradox
 
   def self.create_agents(agents)
     agents.each do |agent|
-      agent[:role].constantize.create!(name: agent[:name])
+      agent[:type].constantize.create!(name: agent[:name])
     end
   end
 
@@ -85,9 +85,9 @@ module Paradox
     # TODO
   end
 
-  def self.find_agent(name, role = nil)
-    role   = role ? role.constantize : Role
-    agents = role.where(name: name)
+  def self.find_agent(name, type = nil)
+    type   = type ? type.constantize : Agent
+    agents = type.where(name: name)
     agents.first if agents and agents.count == 1
   end
 

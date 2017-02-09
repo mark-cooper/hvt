@@ -1,10 +1,10 @@
-class CreateAgents < ActiveRecord::Migration[5.0]
+class CreateActivities < ActiveRecord::Migration[5.0]
   def change
-    create_table :agents do |t|
+    create_table :activities do |t|
       t.references :record, index: true
       t.references :interview, index: true
       t.references :proof, index: true
-      t.references :role, index: true
+      t.references :agent, index: true
       t.references :cataloger, index: true
       t.references :corrector, index: true
       t.references :editor, index: true
