@@ -6,7 +6,8 @@ class Record < ApplicationRecord
   # has_many :tapes
 
   has_many :terms
-  has_many :subjects, through: :terms
+  has_many :subject_authorities, through: :terms
+  has_many :corporate_authorities, through: :terms
 
   has_many :activities
   has_many :summarizers, through: :activities

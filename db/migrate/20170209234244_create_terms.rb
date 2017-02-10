@@ -3,7 +3,8 @@ class CreateTerms < ActiveRecord::Migration[5.0]
     create_table :terms do |t|
       t.references :record, index:true
       t.references :authority, index:true
-      t.references :subject, index:true
+      t.references :subject_authority, index:true
+      t.references :corporate_authority, index:true
       t.timestamps
     end
   end

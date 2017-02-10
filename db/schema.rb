@@ -108,20 +108,17 @@ ActiveRecord::Schema.define(version: 20170209234244) do
     t.index ["collection_id"], name: "index_records_on_collection_id"
   end
 
-  create_table "subjects", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "terms", force: :cascade do |t|
     t.integer  "record_id"
     t.integer  "authority_id"
-    t.integer  "subject_id"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.integer  "subject_authority_id"
+    t.integer  "corporate_authority_id"
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
     t.index ["authority_id"], name: "index_terms_on_authority_id"
+    t.index ["corporate_authority_id"], name: "index_terms_on_corporate_authority_id"
     t.index ["record_id"], name: "index_terms_on_record_id"
-    t.index ["subject_id"], name: "index_terms_on_subject_id"
+    t.index ["subject_authority_id"], name: "index_terms_on_subject_authority_id"
   end
 
 end
