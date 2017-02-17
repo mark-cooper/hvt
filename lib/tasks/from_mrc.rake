@@ -3,7 +3,7 @@ require_relative "../mrc/mrc.rb"
 namespace :db do
   desc 'Populate the database from mrc xml records'
   task populate_from_mrc: :environment do
-    hvt_mrc_dir = ENV.fetch('HVT_MRC_DIR', "#{Dir.tmpdir}/hvt")
+    hvt_mrc_dir = ENV.fetch('HVT_MRC_DIR', "db/data")
     records     = {}
 
     Dir["#{hvt_mrc_dir}/*.xml"].each do |mrc|

@@ -8,13 +8,28 @@ require_relative "cassette"
 
 module Paradox
 
+  def self.all_agents
+    agents = Hash.new { |hash, key| hash[key] = {} }
+    Agent.all.each do |agent|
+      agents[agent.type][agent.name] = agent
+    end
+    agents
+  end
+
   def self.create_agents(agents)
     agents.each do |agent|
-      agent[:type].constantize.create!(name: agent[:name])
+      begin
+        agent[:type].constantize.create!(name: agent[:name])
+      rescue
+        # swallow duplicate agent errors and move along ...
+      end
     end
   end
 
   def self.create_records(records)
+    # preload agents ...
+    agents = Paradox.all_agents
+
     records.each do |id, data|
       r      = data[:record]
       i      = data[:interviews]
@@ -29,17 +44,22 @@ module Paradox
 
       # these attributes are merged in from 'process' so need to check conservatively
       record.note           = r[:note] if r.has_key? :note
-      record.summary_by     = [Paradox.find_agent(r[:summary_by], 'Summarizer')].compact
+      record.summary_by     = [ agents["Summarizer"][r[:summary_by]] ].compact
       record.summary_date   = Paradox.parse_date(r[:summary_date])
-      record.cataloged_by   = [Paradox.find_agent(r[:cataloged_by], "Cataloger")].compact
+
+      record.cataloged_by   = [ agents["Cataloger"][r[:cataloged_by]] ].compact
       record.cataloged_date = Paradox.parse_date(r[:cataloged_date])
-      record.input_by       = [Paradox.find_agent(r[:input_by], "Inputter")].compact
+
+      record.input_by       = [ agents["Inputter"][r[:input_by]] ].compact
       record.input_date     = Paradox.parse_date(r[:input_date])
-      record.edited_by      = [Paradox.find_agent(r[:edited_by], "Editor")].compact
+
+      record.edited_by      = [ agents["Editor"][r[:edited_by]] ].compact
       record.edited_date    = Paradox.parse_date(r[:edited_date])
-      record.corrected_by   = [Paradox.find_agent(r[:corrected_by], "Corrector")].compact
+
+      record.corrected_by   = [ agents["Corrector"][r[:corrected_by]] ].compact
       record.corrected_date = Paradox.parse_date(r[:corrected_date])
-      record.produced_by    = [Paradox.find_agent(r[:produced_by], "Producer")].compact
+
+      record.produced_by    = [ agents["Producer"][r[:produced_by]] ].compact
       record.produced_date  = Paradox.parse_date(r[:produced_date])
 
       record.has_paradox = true
@@ -52,7 +72,7 @@ module Paradox
       third  = Paradox.get_proof(r[:third_proof_by], r[:third_proof_date])
       proofs = [first, second, third].compact
 
-      Paradox.create_proofs record, proofs
+      Paradox.create_proofs record, proofs, agents
       
       # create interviews
       Paradox.create_interviews record, i
@@ -62,12 +82,12 @@ module Paradox
     end
   end
 
-  def self.create_proofs(record, proofs)
+  def self.create_proofs(record, proofs, agents)
     proofs.each do |proof|
-      proofer = Paradox.find_agent(proof[:name], "Proofer")
+      proofer = agents["Proofer"][proof[:name]]
       date    = Paradox.parse_date(proof[:date])
       record.proofs.create!({
-        proofers: [proofer],
+        proofers: [ proofer ],
         date: date,
       })
     end
