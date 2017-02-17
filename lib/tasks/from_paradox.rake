@@ -37,10 +37,15 @@ namespace :db do
       records[id][:tapes] = cassette_records[id]
     end
 
+    puts "Creating collections! #{Time.now}"
+    Paradox.create_collections primary.collections
+
     puts "Creating agents! #{Time.now}"
     Paradox.create_agents agents
+
     puts "Creating records! #{Time.now}"
     Paradox.create_records records
+
     puts "Database updated from Paradox! #{Time.now}"
   end
 end

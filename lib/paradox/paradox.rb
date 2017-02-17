@@ -1,5 +1,6 @@
 require 'date'
 require 'pp'
+require 'set'
 require_relative "client"
 require_relative "primary"
 require_relative "process"
@@ -16,6 +17,12 @@ module Paradox
     agents
   end
 
+  def self.all_collections
+    collections = {}
+    Collection.all.each { |c| collections[c[:name]] = c }
+    collections
+  end
+
   def self.create_agents(agents)
     agents.each do |agent|
       begin
@@ -26,9 +33,16 @@ module Paradox
     end
   end
 
+  def self.create_collections(collections)
+    collections.each do |collection|
+      Collection.create!(name: collection)
+    end
+  end
+
   def self.create_records(records)
-    # preload agents ...
-    agents = Paradox.all_agents
+    # preload agents and collections ...
+    agents      = Paradox.all_agents
+    collections = Paradox.all_collections
 
     records.each do |id, data|
       r      = data[:record]
@@ -40,7 +54,7 @@ module Paradox
       record = Record.create!(id: id) unless record
       
       record.extent         = r[:count]
-      record.collection     = Paradox.find_or_create_collection!(r[:collection])
+      record.collection     = collections[r[:collection]]
 
       # these attributes are merged in from 'process' so need to check conservatively
       record.note           = r[:note] if r.has_key? :note
@@ -75,7 +89,7 @@ module Paradox
       Paradox.create_proofs record, proofs, agents
       
       # create interviews
-      Paradox.create_interviews record, i
+      Paradox.create_interviews record, i, agents
       
       # create tapes
       Paradox.create_tapes record, t
@@ -97,12 +111,30 @@ module Paradox
     { name: name, date: date } if name and !name.empty?
   end
 
-  def self.create_interviews(record, interviews)
-    # TODO
+  def self.create_interviews(record, interviews, agents)
+    interviews.each do |interview|
+      interviewee  = agents["Interviewee"][interview[:interviewee]]
+      interviewer1 = agents["Interviewer"][interview[:interviewer_1]]
+      interviewer2 = agents["Interviewer"][interview[:interviewer_2]]
+      interviewer3 = agents["Interviewer"][interview[:interviewer_3]]
+      interviewer4 = agents["Interviewer"][interview[:interviewer_4]]
+      interviewers = [interviewer1, interviewer2, interviewer3, interviewer4]
+      record.interviews.create!({
+        interviewees: [ interviewee ],
+        interviewers: interviewers.compact,
+        date: interview[:date],
+        length: interview[:length],
+        note: interview[:notes],
+      })
+    end
   end
 
   def self.create_tapes(record, tapes)
-    # TODO
+    tapes.each do |tape|
+      # record.tapes.create!({
+      #   # TODO
+      # })
+    end
   end
 
   def self.find_agent(name, type = nil)

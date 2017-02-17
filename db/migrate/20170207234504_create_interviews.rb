@@ -8,6 +8,8 @@ class CreateInterviews < ActiveRecord::Migration[5.0]
       t.string     :date_expression
       # 'persdata' 'Length of interview'
       t.string     :length
+      # 'persdata' 'Notes'
+      t.text       :note
       t.timestamps
     end
   end

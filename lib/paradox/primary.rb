@@ -6,6 +6,7 @@ module Paradox
       @db.query(@query, cast: false).each do |row|
         id = row["T-number"].to_i
         next if id == 0
+        add_collection row["Collection"]
 
         @records[id] << {
           collection: row["Collection"],
