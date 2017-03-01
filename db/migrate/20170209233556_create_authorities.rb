@@ -6,6 +6,6 @@ class CreateAuthorities < ActiveRecord::Migration[5.0]
       t.string     :source
       t.timestamps
     end
-    add_index :authorities, [:type, :name], unique: true
+    add_index :authorities, [:type, :name, :source], unique: true
   end
 end

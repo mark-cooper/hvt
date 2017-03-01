@@ -57,7 +57,7 @@ ActiveRecord::Schema.define(version: 20170301154547) do
     t.string   "source"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["type", "name"], name: "index_authorities_on_type_and_name", unique: true, using: :btree
+    t.index ["type", "name", "source"], name: "index_authorities_on_type_and_name_and_source", unique: true, using: :btree
   end
 
   create_table "collections", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
