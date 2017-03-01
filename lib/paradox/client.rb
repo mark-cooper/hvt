@@ -10,7 +10,6 @@ module Paradox
       @records     = Hash.new { |hash, key| hash[key] = [] }
       @agents      = [] # hash [ { name: "Tom Hardy", type: "Actor" } ]
       @collections = Set.new # [ 'Col1', 'Col2' ]
-      @locations   = [] # [ { permanent_location: "Box 001" ... } ]
     end
 
     def add_agents(row)
@@ -23,10 +22,6 @@ module Paradox
 
     def add_collection(collection)
       @collections << collection
-    end
-
-    def add_location(location)
-      @locations << location
     end
 
     def agent_fields

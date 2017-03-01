@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170227200902) do
+ActiveRecord::Schema.define(version: 20170301154547) do
 
   create_table "activities", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "record_id"
@@ -77,6 +77,18 @@ ActiveRecord::Schema.define(version: 20170227200902) do
     t.index ["record_id"], name: "index_interviews_on_record_id", using: :btree
   end
 
+  create_table "inventory_statuses", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "tape_id"
+    t.string   "permanent_location"
+    t.string   "temporary_location"
+    t.string   "location_status"
+    t.integer  "restoration_code"
+    t.string   "offsite_location_code"
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
+    t.index ["tape_id"], name: "index_inventory_statuses_on_tape_id", using: :btree
+  end
+
   create_table "proofs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "record_id"
     t.datetime "date"
@@ -122,6 +134,7 @@ ActiveRecord::Schema.define(version: 20170227200902) do
     t.string   "condition_odor"
     t.string   "condition_edge"
     t.string   "barcode"
+    t.integer  "shared_with"
     t.datetime "created_at",                   null: false
     t.datetime "updated_at",                   null: false
     t.index ["record_id"], name: "index_tapes_on_record_id", using: :btree

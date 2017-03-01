@@ -132,7 +132,9 @@ module Paradox
 
   def self.create_tapes(record, tapes)
     tapes.each do |tape|
-      tape[:date] = Paradox.parse_date(tape[:date])
+      tape[:date]             = Paradox.parse_date(tape[:date])
+      inventory_status        = tape.delete :inventory_status
+      tape[:inventory_status] = InventoryStatus.new(inventory_status) if inventory_status
       record.tapes.create!(tape)
     end
   end
