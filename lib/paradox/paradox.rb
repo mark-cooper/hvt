@@ -12,7 +12,8 @@ module Paradox
   def self.all_agents
     agents = Hash.new { |hash, key| hash[key] = {} }
     Agent.all.each do |agent|
-      agents[agent.type][agent.name] = agent
+      # downcase lookups to normalize irregular entries
+      agents[agent.type][agent.name.downcase] = agent
     end
     agents
   end
@@ -58,22 +59,22 @@ module Paradox
 
       # these attributes are merged in from 'process' so need to check conservatively
       record.note           = r[:note] if r.has_key? :note
-      record.summary_by     = [ agents["Summarizer"][r[:summary_by]] ].compact
+      record.summary_by     = [ Paradox.lookup_agent(agents, "Summarizer", r[:summary_by]) ].compact
       record.summary_date   = Paradox.parse_date(r[:summary_date])
 
-      record.cataloged_by   = [ agents["Cataloger"][r[:cataloged_by]] ].compact
+      record.cataloged_by   = [ Paradox.lookup_agent(agents, "Cataloger", r[:cataloged_by]) ].compact
       record.cataloged_date = Paradox.parse_date(r[:cataloged_date])
 
-      record.input_by       = [ agents["Inputter"][r[:input_by]] ].compact
+      record.input_by       = [ Paradox.lookup_agent(agents, "Inputter", r[:input_by]) ].compact
       record.input_date     = Paradox.parse_date(r[:input_date])
 
-      record.edited_by      = [ agents["Editor"][r[:edited_by]] ].compact
+      record.edited_by      = [ Paradox.lookup_agent(agents, "Editor", r[:edited_by]) ].compact
       record.edited_date    = Paradox.parse_date(r[:edited_date])
 
-      record.corrected_by   = [ agents["Corrector"][r[:corrected_by]] ].compact
+      record.corrected_by   = [ Paradox.lookup_agent(agents, "Corrector", r[:corrected_by]) ].compact
       record.corrected_date = Paradox.parse_date(r[:corrected_date])
 
-      record.produced_by    = [ agents["Producer"][r[:produced_by]] ].compact
+      record.produced_by    = [ Paradox.lookup_agent(agents, "Producer", r[:produced_by]) ].compact
       record.produced_date  = Paradox.parse_date(r[:produced_date])
 
       record.has_paradox = true
@@ -98,7 +99,7 @@ module Paradox
 
   def self.create_proofs(record, proofs, agents)
     proofs.each do |proof|
-      proofer = agents["Proofer"][proof[:name]]
+      proofer = Paradox.lookup_agent(agents, "Proofer", proof[:name])
       date    = Paradox.parse_date(proof[:date])
       record.proofs.create!({
         proofers: [ proofer ],
@@ -113,11 +114,11 @@ module Paradox
 
   def self.create_interviews(record, interviews, agents)
     interviews.each do |interview|
-      interviewee  = agents["Interviewee"][interview[:interviewee]]
-      interviewer1 = agents["Interviewer"][interview[:interviewer_1]]
-      interviewer2 = agents["Interviewer"][interview[:interviewer_2]]
-      interviewer3 = agents["Interviewer"][interview[:interviewer_3]]
-      interviewer4 = agents["Interviewer"][interview[:interviewer_4]]
+      interviewee  = Paradox.lookup_agent(agents, "Interviewee", interview[:interviewee])
+      interviewer1 = Paradox.lookup_agent(agents, "Interviewer", interview[:interviewer_1])
+      interviewer2 = Paradox.lookup_agent(agents, "Interviewer", interview[:interviewer_2])
+      interviewer3 = Paradox.lookup_agent(agents, "Interviewer", interview[:interviewer_3])
+      interviewer4 = Paradox.lookup_agent(agents, "Interviewer", interview[:interviewer_4])
       interviewers = [interviewer1, interviewer2, interviewer3, interviewer4]
       record.interviews.create!({
         interviewees: [ interviewee ],
@@ -131,9 +132,8 @@ module Paradox
 
   def self.create_tapes(record, tapes)
     tapes.each do |tape|
-      # record.tapes.create!({
-      #   # TODO
-      # })
+      tape[:date] = Paradox.parse_date(tape[:date])
+      record.tapes.create!(tape)
     end
   end
 
@@ -151,6 +151,11 @@ module Paradox
       collection = Collection.create!(name: name)
     end
     collection
+  end
+
+  # agents have downcased name for lookups
+  def self.lookup_agent(agents, type, name)
+    agents[type][name.downcase] unless name.nil?
   end
 
   def self.parse_date(date)

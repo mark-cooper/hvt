@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170209234244) do
+ActiveRecord::Schema.define(version: 20170227200902) do
 
   create_table "activities", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "record_id"
@@ -71,8 +71,9 @@ ActiveRecord::Schema.define(version: 20170209234244) do
     t.datetime "date"
     t.string   "date_expression"
     t.string   "length"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.text     "note",            limit: 65535
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
     t.index ["record_id"], name: "index_interviews_on_record_id", using: :btree
   end
 
@@ -106,6 +107,24 @@ ActiveRecord::Schema.define(version: 20170209234244) do
     t.datetime "created_at",                                        null: false
     t.datetime "updated_at",                                        null: false
     t.index ["collection_id"], name: "index_records_on_collection_id", using: :btree
+  end
+
+  create_table "tapes", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "record_id"
+    t.string   "recording_type"
+    t.integer  "number"
+    t.string   "format"
+    t.string   "source"
+    t.datetime "date"
+    t.string   "manufacturer"
+    t.text     "note",           limit: 65535
+    t.string   "condition_tape"
+    t.string   "condition_odor"
+    t.string   "condition_edge"
+    t.string   "barcode"
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+    t.index ["record_id"], name: "index_tapes_on_record_id", using: :btree
   end
 
   create_table "terms", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|

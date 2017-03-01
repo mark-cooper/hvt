@@ -3,7 +3,7 @@ class Record < ApplicationRecord
 
   has_many :interviews
   has_many :proofs
-  # has_many :tapes
+  has_many :tapes
 
   has_many :terms
   has_many :subject_authorities, through: :terms

@@ -4,8 +4,10 @@ A micro-app for aggregating data from Paradox db and mrc records.
 
 ## Setup
 
+- Run mrc to marcxml conversion script.
 - Add mrc records (individual marcxml) to `db/data`.
 - Load paradox db into MySQL as `paradox`.
+- `UPDATE persdata SET name = 'Unspecified' WHERE name = '';`
 
 ```bash
 # testing record loads
