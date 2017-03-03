@@ -7,12 +7,17 @@ module MRC
 
   def self.add_authorities(record, mrc, authorities, tag, type, source)
     mrc.each_by_tag(tag) do |authority|
-      unless authorities.has_key?(authority.to_s)
-        authorities[authority.to_s] = find_or_create_authority!(type, authority.to_s, source)
+      authority_string = MRC.authority_string(authority)
+      unless authorities.has_key?(authority_string)
+        authorities[authority_string] = find_or_create_authority!(type, authority_string, source)
       end
-      auth = authorities[authority.to_s]
+      auth = authorities[authority_string]
       record.send(ActiveSupport::Inflector.pluralize(type).underscore).send(:push, auth)
     end
+  end
+
+  def self.authority_string(authority)
+    authority.map(&:value).map(&:strip).join(" -- ")
   end
 
   def self.create_records(records)
