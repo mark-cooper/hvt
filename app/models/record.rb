@@ -8,6 +8,9 @@ class Record < ApplicationRecord
   has_many :terms
   has_many :subject_authorities, through: :terms
   has_many :corporate_authorities, through: :terms
+  has_many :person_authorities, through: :terms
+  has_many :geographic_authorities, through: :terms
+  has_many :genre_authorities, through: :terms
 
   has_many :activities
   has_many :summarizers, through: :activities

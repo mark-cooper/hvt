@@ -145,10 +145,16 @@ ActiveRecord::Schema.define(version: 20170301154547) do
     t.integer  "authority_id"
     t.integer  "subject_authority_id"
     t.integer  "corporate_authority_id"
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.integer  "person_authority_id"
+    t.integer  "geographic_authority_id"
+    t.integer  "genre_authority_id"
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
     t.index ["authority_id"], name: "index_terms_on_authority_id", using: :btree
     t.index ["corporate_authority_id"], name: "index_terms_on_corporate_authority_id", using: :btree
+    t.index ["genre_authority_id"], name: "index_terms_on_genre_authority_id", using: :btree
+    t.index ["geographic_authority_id"], name: "index_terms_on_geographic_authority_id", using: :btree
+    t.index ["person_authority_id"], name: "index_terms_on_person_authority_id", using: :btree
     t.index ["record_id"], name: "index_terms_on_record_id", using: :btree
     t.index ["subject_authority_id"], name: "index_terms_on_subject_authority_id", using: :btree
   end

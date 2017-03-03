@@ -6,12 +6,13 @@ module MRC
   ID_SUB = 'a'
 
   def self.add_authorities(record, mrc, authorities, tag, type, source)
+    authorities[type] = {} unless authorities.has_key? type
     mrc.each_by_tag(tag) do |authority|
       authority_string = MRC.authority_string(authority)
-      unless authorities.has_key?(authority_string)
-        authorities[authority_string] = find_or_create_authority!(type, authority_string, source)
+      unless authorities[type].has_key?(authority_string)
+        authorities[type][authority_string] = find_or_create_authority!(type, authority_string, source)
       end
-      auth = authorities[authority_string]
+      auth = authorities[type][authority_string]
       record.send(ActiveSupport::Inflector.pluralize(type).underscore).send(:push, auth)
     end
   end
@@ -38,7 +39,14 @@ module MRC
       record.related_record_stmt = MRC.subfields_to_s(r['544'])
       record.identification_stmt = MRC.subfields_to_s(r['562'])
 
+      MRC.add_authorities(record, r, authorities, '600', 'PersonAuthority', 'lcsh')
+      MRC.add_authorities(record, r, authorities, '610', 'CorporateAuthority', 'lcsh')
       MRC.add_authorities(record, r, authorities, '650', 'SubjectAuthority', 'lcsh')
+      MRC.add_authorities(record, r, authorities, '651', 'GeographicAuthority', 'lcsh')
+      MRC.add_authorities(record, r, authorities, '655', 'GenreAuthority', 'lcsh')
+      MRC.add_authorities(record, r, authorities, '690', 'SubjectAuthority', 'local')
+      MRC.add_authorities(record, r, authorities, '691', 'GeographicAuthority', 'local')
+      MRC.add_authorities(record, r, authorities, '695', 'GenreAuthority', 'local')
 
       record.has_mrc = true
       record.save
