@@ -1,4 +1,4 @@
-# lib/tasks/fix_missing_barcodes.rake
+# lib/tasks/barcodes.rake
 require 'csv'
 namespace :db do
   desc 'Find tapes with barcode "0"'
