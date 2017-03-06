@@ -13,9 +13,13 @@ namespace :ead do
 
   desc 'Create an EAD from all HVT records'
   task from_all: :environment do
-    records = Record.where(has_mrc: true).all
-    puts "Generating EAD from all records: #{records.count}"
-    ead = EAD::FromRecords.process(records)
+    collections = {}
+    Collection.all.each do |collection|
+      records = collection.records.find_all { |r| r.has_mrc }
+      collections[collection] = records
+    end
+    puts "Generating EAD from all collection: #{collections.count}"
+    ead = EAD::FromRecords.process(collections)
     write "HVT-all.xml", ead
   end
 
