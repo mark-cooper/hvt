@@ -3,7 +3,7 @@ module EAD
   module FromRecords
 
     def self.process(collections)
-      ead = EAD::Generator.new
+      gen = EAD::Generator.new
 
       collections.each do |collection, records|
         # TODO collection c01
@@ -13,8 +13,8 @@ module EAD
         end
       end
 
-      # puts ead.to_xml
-      ead.to_xml
+      # puts gen.to_xml
+      gen.to_xml
     end
 
   end
