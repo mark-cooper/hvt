@@ -84,6 +84,12 @@ module EAD
 
       gen.add_authorities authorities
 
+      record.tapes.each do |tape|
+        c01  = gen.add_c01(tape.id.to_s)
+        path = c01.path
+        path.did.unittitle = tape.recording_type
+      end
+
       # puts gen.to_xml
       gen.to_xml
     end
