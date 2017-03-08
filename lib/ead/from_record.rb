@@ -23,12 +23,47 @@ module EAD
       gen.set_language "English", "eng"
       gen.repository = "Manuscripts and Archives"
       gen.unitid     = "HVT-#{record.id}"
-      gen.unittitle  = gen.title
+      gen.unittitle  = record.title
+      gen.prefercite = record.citation
 
       odds = []
       # odds << { "Publication Date" => record.publication_date }
       odds << { "Summary" => record.abstract } if record.abstract
       gen.add_odds odds
+
+      related_materials = []
+      related_materials << { "Related Archival Materials" => record.related_record_stmt }
+      related_materials << { "Copy and Version Identification" => record.identification_stmt }
+      gen.add_related_materials related_materials
+
+      authorities = []
+      subjects = record.subject_authorities.all.map {
+        |a| { type: SubjectAuthority.element, name: a[:name], source: a[:source] }
+      }
+
+      geognames = record.geographic_authorities.all.map {
+        |a| { type: GeographicAuthority.element, name: a[:name], source: a[:source] }
+      }
+
+      genreforms = record.genre_authorities.all.map {
+        |a| { type: GenreAuthority.element, name: a[:name], source: a[:source] }
+      }
+
+      persnames = record.person_authorities.all.map {
+        |a| { type: PersonAuthority.element, name: a[:name], source: a[:source] }
+      }
+
+      corpnames = record.corporate_authorities.all.map {
+        |a| { type: CorporateAuthority.element, name: a[:name], source: a[:source] }
+      }
+
+      authorities.concat subjects
+      authorities.concat geognames
+      authorities.concat genreforms
+      authorities.concat persnames
+      authorities.concat corpnames
+
+      gen.add_authorities authorities
 
       # puts gen.to_xml
       gen.to_xml
