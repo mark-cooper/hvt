@@ -21,6 +21,14 @@ module EAD
       path.descrules     = "dacs"
 
       gen.set_language "English", "eng"
+      gen.repository = "Manuscripts and Archives"
+      gen.unitid     = "HVT-#{record.id}"
+      gen.unittitle  = gen.title
+
+      odds = []
+      # odds << { "Publication Date" => record.publication_date }
+      odds << { "Summary" => record.abstract } if record.abstract
+      gen.add_odds odds
 
       # puts gen.to_xml
       gen.to_xml
