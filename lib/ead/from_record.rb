@@ -26,6 +26,25 @@ module EAD
       gen.unittitle  = record.title
       gen.prefercite = record.citation
 
+      originations = []
+      originations << {
+        type: "corpname", name: "Holocaust Survivors Film Project", role: "pro", source: "local"
+      }
+
+      record.interviews.each do |interview|
+        interviewees = interview.interviewees.all.map {
+          |i| { type: "persname", name: i[:name], role: "ive", source: "lcsh" }
+        }
+
+        interviewers = interview.interviewers.all.map {
+          |i| { type: "persname", name: i[:name], role: "ivr", source: "lcsh" }
+        }
+        originations.concat interviewees
+        originations.concat interviewers
+      end
+
+      gen.add_originations originations
+
       odds = []
       # odds << { "Publication Date" => record.publication_date }
       odds << { "Summary" => record.abstract } if record.abstract
