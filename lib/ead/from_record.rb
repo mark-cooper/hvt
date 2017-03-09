@@ -26,6 +26,9 @@ module EAD
       gen.unittitle  = record.title
       gen.prefercite = record.citation
 
+      # physdec
+      # unitdate
+
       originations = []
       originations << {
         type: "corpname", name: "Holocaust Survivors Film Project", role: "pro", source: "local"
@@ -46,7 +49,7 @@ module EAD
       gen.add_originations originations
 
       odds = []
-      # odds << { "Publication Date" => record.publication_date } # TODO (add to schema)
+      odds << { "Publication Date" => record.publication_date }
       odds << { "Summary" => record.abstract } if record.abstract
       gen.add_odds odds
 
@@ -56,25 +59,12 @@ module EAD
       gen.add_related_materials related_materials
 
       authorities = []
-      subjects = record.subject_authorities.all.map {
-        |a| { type: SubjectAuthority.element, name: a[:name], source: a[:source] }
-      }
 
-      geognames = record.geographic_authorities.all.map {
-        |a| { type: GeographicAuthority.element, name: a[:name], source: a[:source] }
-      }
-
-      genreforms = record.genre_authorities.all.map {
-        |a| { type: GenreAuthority.element, name: a[:name], source: a[:source] }
-      }
-
-      persnames = record.person_authorities.all.map {
-        |a| { type: PersonAuthority.element, name: a[:name], source: a[:source] }
-      }
-
-      corpnames = record.corporate_authorities.all.map {
-        |a| { type: CorporateAuthority.element, name: a[:name], source: a[:source] }
-      }
+      subjects   = EAD.get_authorities(record, SubjectAuthority, :subject_authorities)
+      geognames  = EAD.get_authorities(record, GeographicAuthority, :geographic_authorities)
+      genreforms = EAD.get_authorities(record, GenreAuthority, :genre_authorities)
+      persnames  = EAD.get_authorities(record, PersonAuthority, :person_authorities)
+      corpnames  = EAD.get_authorities(record, CorporateAuthority, :corporate_authorities)
 
       authorities.concat subjects
       authorities.concat geognames
@@ -93,10 +83,26 @@ module EAD
       end
 
       tapes.each do |type, tape|
-        c01  = gen.add_c01("aspace_#{type.downcase.gsub(/\s/, '_')}")
+        c01  = gen.add_c01(EAD.id_for_recording_type(type))
         path = c01.path
         path.level = "file"
         path.did.unittitle = type
+
+        c01.add_extent "#{tape.count.to_s} Videocassettes (#{tape[0].format})"
+
+        if tape[0].date
+          c01.add_physfacet_date "Created from #{tape[0].source}, ", tape[0].date
+        else
+          c01.add_physfacet "Created from #{tape[0].source}."
+        end
+
+        tape.each do |t|
+          c01.add_physfacet_corpname "Tape #{t.number.to_s}: ", t.manufacturer
+
+          if t.shared_with > 0
+            c01.add_physfacet "Tape #{t.number.to_s} is shared with HVT-#{t.shared_with.to_s} #{type} Tape 1."
+          end
+        end
 
         c01.add_containers(tape.map { |t| { id: t.id, barcode: t.barcode, number: t.number } })
       end
