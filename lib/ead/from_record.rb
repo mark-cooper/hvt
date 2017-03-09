@@ -16,7 +16,7 @@ module EAD
       path.extptr.xlink_type  = "simple"
 
       path               = gen.ead.eadheader.profiledesc
-      path.creation      = "This finding aid was produced using ArchivesSpace on "
+      path.creation      = "This finding aid was produced for ArchivesSpace using HVT (micro-app) on "
       path.creation.date = Time.now.to_s
       path.descrules     = "dacs"
 
@@ -46,7 +46,7 @@ module EAD
       gen.add_originations originations
 
       odds = []
-      # odds << { "Publication Date" => record.publication_date }
+      # odds << { "Publication Date" => record.publication_date } # TODO (add to schema)
       odds << { "Summary" => record.abstract } if record.abstract
       gen.add_odds odds
 
@@ -84,10 +84,21 @@ module EAD
 
       gen.add_authorities authorities
 
+      tapes = Hash.new { |hash, key| hash[key] = [] }
       record.tapes.each do |tape|
-        c01  = gen.add_c01(tape.id.to_s)
+        # group tapes by recording type
+        # each distinct type is ONE c0*
+        # each tape is a container element
+        tapes[tape.recording_type] << tape
+      end
+
+      tapes.each do |type, tape|
+        c01  = gen.add_c01("aspace_#{type.downcase.gsub(/\s/, '_')}")
         path = c01.path
-        path.did.unittitle = tape.recording_type
+        path.level = "file"
+        path.did.unittitle = type
+
+        c01.add_containers(tape.map { |t| { id: t.id, barcode: t.barcode, number: t.number } })
       end
 
       # puts gen.to_xml
