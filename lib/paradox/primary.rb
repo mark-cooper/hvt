@@ -11,6 +11,7 @@ module Paradox
         @records[id] << {
           collection: row["Collection"],
           count: row["Master count"].to_i,
+          stock: row["Master stock"],
         }
         # break
       end

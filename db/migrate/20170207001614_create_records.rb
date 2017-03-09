@@ -10,6 +10,12 @@ class CreateRecords < ActiveRecord::Migration[5.0]
       t.integer    :extent
       # $300 [physdesc][extent]
       t.string     :extent_expression
+      # 'primary' 'Master stock'
+      t.string     :stock
+      # $260c [odd]
+      t.string     :publication_date
+      # $245f [unitdate]
+      t.string     :date_expression
       # 'primary' 'Collection'
       t.references :collection, index:true
       # $520

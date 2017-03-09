@@ -33,6 +33,8 @@ module MRC
 
       record.identifier          = MRC.subfield_value_for(r['910'],'b')
       record.title               = MRC.subfields_to_s(r['245'])
+      record.date_expression     = MRC.subfield_value_for(r['245'],'f')
+      record.publication_date    = MRC.subfield_value_for(r['260'],'c')
       record.extent_expression   = MRC.subfields_to_s(r['300'])
       record.abstract            = MRC.subfields_to_s(r['520'])
       record.citation            = MRC.subfields_to_s(r['524'])
