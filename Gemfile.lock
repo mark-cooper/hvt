@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/lyrasis/ead.git
-  revision: cb587b13dde3dadb2c433dbb37024ec81428b674
+  revision: c5f3a717411304090cf676f8d643ea3b83702d22
   branch: master
   specs:
     ead (0.1.0)

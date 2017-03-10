@@ -32,7 +32,7 @@ module EAD
 
       gen.add_extent "#{record.extent.to_s} Videocassettes (#{record.stock})"
 
-      gen.prefercite = record.citation
+      gen.prefercite = record.citation if record.citation
 
       originations = []
       originations << {
@@ -54,13 +54,19 @@ module EAD
       gen.add_originations originations
 
       odds = []
-      odds << { "Publication Date" => record.publication_date }
+      odds << { "Publication Date" => record.publication_date } if record.publication_date
       odds << { "Summary" => record.abstract } if record.abstract
       gen.add_odds odds
 
       related_materials = []
-      related_materials << { "Related Archival Materials" => record.related_record_stmt }
-      related_materials << { "Copy and Version Identification" => record.identification_stmt }
+      related_materials << {
+        "Related Archival Materials" => record.related_record_stmt
+      } if record.related_record_stmt
+
+      related_materials << {
+        "Copy and Version Identification" => record.identification_stmt
+        } if record.identification_stmt
+
       gen.add_related_materials related_materials
 
       authorities = []
