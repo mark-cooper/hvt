@@ -102,6 +102,9 @@ ActiveRecord::Schema.define(version: 20170301154547) do
     t.string   "title"
     t.integer  "extent"
     t.string   "extent_expression"
+    t.string   "stock"
+    t.string   "publication_date"
+    t.string   "date_expression"
     t.integer  "collection_id"
     t.text     "abstract",            limit: 65535
     t.text     "note",                limit: 65535
