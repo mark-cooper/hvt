@@ -6,7 +6,7 @@ namespace :ead do
   FileUtils.rm_rf(Dir.glob("#{HVT_EAD_DIR}/*.xml"))
 
   def write(filename, ead)
-    File.open(File.join(HVT_EAD_DIR, filename), 'w') do |f|
+    File.open(File.join(HVT_EAD_DIR, filename), 'w:UTF-8') do |f|
       f.write ead
     end
   end
