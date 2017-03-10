@@ -25,7 +25,7 @@ module EAD
       gen.unitid     = "HVT-#{record.id}"
       gen.unittitle  = record.title
 
-      dates = record.date_expression.split(" and ")
+      dates = record.date_expression.split(" and ") rescue []
       dates.each do |d|
         gen.unitdate = d
       end
