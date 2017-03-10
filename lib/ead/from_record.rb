@@ -24,10 +24,15 @@ module EAD
       gen.repository = "Manuscripts and Archives"
       gen.unitid     = "HVT-#{record.id}"
       gen.unittitle  = record.title
-      gen.prefercite = record.citation
 
-      # physdec
-      # unitdate
+      dates = record.date_expression.split(" and ")
+      dates.each do |d|
+        gen.unitdate = d
+      end
+
+      gen.add_extent "#{record.extent.to_s} Videocassettes (#{record.stock})"
+
+      gen.prefercite = record.citation
 
       originations = []
       originations << {
