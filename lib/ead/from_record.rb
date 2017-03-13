@@ -4,7 +4,8 @@ module EAD
 
     def self.process(record)
       gen = EAD::Generator.new
-      gen.set_title record.title, "HVT.#{record.id}", " "
+
+      # boilerplate
       gen.publisher = "Manuscripts and Archives"
       gen.address   = EAD::HVT_ADDRESS
 
@@ -22,6 +23,9 @@ module EAD
 
       gen.set_language "English", "eng"
       gen.repository = "Manuscripts and Archives"
+
+      # record specific
+      gen.set_title record.title, "HVT.#{record.id}", " "
       gen.unitid     = "HVT-#{record.id}"
       gen.unittitle  = record.title
 
@@ -85,37 +89,11 @@ module EAD
 
       gen.add_authorities authorities
 
-      tapes = Hash.new { |hash, key| hash[key] = [] }
-      record.tapes.each do |tape|
-        # group tapes by recording type
-        # each distinct type is ONE c0*
-        # each tape is a container element
-        tapes[tape.recording_type] << tape
-      end
+      grp_tapes = EAD.group_tapes_by_type(record)
 
-      tapes.each do |type, tape|
+      grp_tapes.each do |type, tapes|
         c01  = gen.add_c01(EAD.id_for_recording_type(type))
-        path = c01.path
-        path.level = "file"
-        path.did.unittitle = type
-
-        c01.add_extent "#{tape.count.to_s} Videocassettes (#{tape[0].format})"
-
-        if tape[0].date
-          c01.add_physfacet_date "Created from #{tape[0].source}, ", tape[0].date
-        else
-          c01.add_physfacet "Created from #{tape[0].source}."
-        end
-
-        tape.each do |t|
-          c01.add_physfacet_corpname "Tape #{t.number.to_s}: ", t.manufacturer
-
-          if t.shared_with > 0
-            c01.add_physfacet "Tape #{t.number.to_s} is shared with HVT-#{t.shared_with.to_s} #{type} Tape 1."
-          end
-        end
-
-        c01.add_containers(tape.map { |t| { id: t.id, barcode: t.barcode, number: t.number } })
+        EAD.handle_tapes_for c01, type, tapes
       end
 
       # puts gen.to_xml
