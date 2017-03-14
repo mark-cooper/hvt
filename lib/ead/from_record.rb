@@ -63,7 +63,7 @@ module EAD
       odds = []
       odds << { "Publication Date" => record.publication_date } if record.publication_date
       odds << { "Summary" => record.abstract } if record.abstract
-      gen.add_odds odds
+      gen.add_odds odds, false
 
       related_materials = []
       related_materials << {
@@ -74,7 +74,7 @@ module EAD
         "Copy and Version Identification" => record.identification_stmt
         } if record.identification_stmt
 
-      gen.add_related_materials related_materials
+      gen.add_related_materials related_materials, false
 
       authorities = []
 
