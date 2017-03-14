@@ -12,7 +12,8 @@ module EAD
     "URL: ",
   ]
 
-  HVT_URL = "http://www.library.yale.edu/mssa/"
+  HVT_URL   = "http://www.library.yale.edu/mssa/"
+  HVT_TITLE = "Fortunoff Video Archive of Holocaust Testimonies"
 
   # subjects = EAD.get_authorities(record, SubjectAuthority, :subject_authorities) etc.
   def self.get_authorities(record, klass, association_method)
@@ -55,10 +56,14 @@ module EAD
     component.add_containers(tapes.map { |t| { id: t.id, barcode: t.barcode, number: t.number } })
   end
 
+  def self.id_for(value)
+    value.downcase.gsub(/\s/, '_')
+  end
+
   # EAD.id_for_recording_type(tape.recording_type)
   def self.id_for_recording_type(recording_type, prefix = nil)
     recording_type = "#{prefix.to_s}_#{recording_type}" if prefix
-    recording_type.downcase.gsub(/\s/, '_')
+    EAD.id_for recording_type
   end
 
 end

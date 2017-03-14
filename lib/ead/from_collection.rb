@@ -3,6 +3,7 @@ module EAD
   module FromCollection
 
     def self.process(collection, records)
+      puts "Generating EAD for HVT #{collection.name}"
       gen = EAD::Generator.new
 
       # boilerplate
@@ -14,14 +15,16 @@ module EAD
       gen.unittitle  = collection.name
 
       records.each do |record|
-        c01  = gen.add_c01("hvt_#{record.id}")
-        c01.level = "otherlevel"
-        c01.unittitle = record.title, "HVT.#{record.id}", " "
+        puts "Processing record #{record.id}"
+        record_id     = "hvt_#{record.id}"
+        c01           = gen.add_c01(record_id)
+        c01.level     = "otherlevel"
+        c01.unittitle = record.title
 
         grp_tapes = EAD.group_tapes_by_type(record)
 
         grp_tapes.each do |type, tapes|
-          c02 = gen.add_c02_by_parent_id("hvt_#{record.id}", EAD.id_for_recording_type(type, record.id))
+          c02 = gen.add_c02_by_parent_id(record_id, EAD.id_for_recording_type(type, record.id))
           EAD.handle_tapes_for c02, type, tapes
         end
       end

@@ -3,6 +3,7 @@ module EAD
   module FromRecord
 
     def self.process(record)
+      puts "Generating EAD for HVT #{record.id}: #{record.title}"
       gen = EAD::Generator.new
 
       # boilerplate
