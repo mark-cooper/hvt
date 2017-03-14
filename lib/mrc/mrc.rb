@@ -40,6 +40,7 @@ module MRC
       record.citation            = MRC.subfields_to_s(r['524'])
       record.related_record_stmt = MRC.subfields_to_s(r['544'])
       record.identification_stmt = MRC.subfields_to_s(r['562'])
+      record.bib_id              = r['001'].value if r['001']
 
       MRC.add_authorities(record, r, authorities, '600', 'PersonAuthority', 'lcsh')
       MRC.add_authorities(record, r, authorities, '610', 'CorporateAuthority', 'lcsh')
