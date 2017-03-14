@@ -17,10 +17,8 @@ module EAD
       path.extptr.xlink_title = EAD::HVT_URL
       path.extptr.xlink_type  = "simple"
 
-      path               = gen.ead.eadheader.profiledesc
-      path.creation      = "This finding aid was produced for ArchivesSpace using HVT (micro-app) on "
-      path.creation.date = Time.now.to_s
-      path.descrules     = "dacs"
+      gen.set_create_date(Time.now.to_s, "This finding aid was produced for ArchivesSpace using HVT (micro-app) on ")
+      gen.descrules = "dacs"
 
       gen.set_language "English", "eng"
       gen.repository = "Manuscripts and Archives"
