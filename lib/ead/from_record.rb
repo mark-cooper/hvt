@@ -26,8 +26,9 @@ module EAD
       gen.repository = "Manuscripts and Archives"
 
       # record specific
+      gen.eadid = "mssa.hvt.#{record.id.to_s.rjust(5, '0')}"
       gen.set_title record.title, "HVT.#{record.id}", " "
-      gen.set_note(EAD::HVT_BIB, "bpg", record.bib_id, " ", "Orbis-bib") if record.bib_id
+      gen.set_note(EAD::HVT_BIB, "bpg", record.bib_id, " ", "Orbis-bib")
       gen.unitid     = "HVT-#{record.id}"
       gen.unittitle  = record.title
 
