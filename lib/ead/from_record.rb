@@ -27,6 +27,7 @@ module EAD
 
       # record specific
       gen.set_title record.title, "HVT.#{record.id}", " "
+      gen.set_note(EAD::HVT_BIB, "bpg", record.bib_id, " ", "Orbis-bib") if record.bib_id
       gen.unitid     = "HVT-#{record.id}"
       gen.unittitle  = record.title
 

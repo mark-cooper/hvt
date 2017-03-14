@@ -57,6 +57,7 @@ module Paradox
       record.extent         = r[:count]
       record.collection     = collections[r[:collection]]
       record.stock          = r[:stock]
+      record.bib_id         = r[:bib_id]
 
       # these attributes are merged in from 'process' so need to check conservatively
       record.note           = r[:note] if r.has_key? :note

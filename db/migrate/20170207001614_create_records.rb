@@ -28,6 +28,8 @@ class CreateRecords < ActiveRecord::Migration[5.0]
       t.text       :related_record_stmt
       # $562 [relatedmaterial]
       t.text       :identification_stmt
+      # 'process' 'VoyagerKey'
+      t.string     :bib_id
 
       # 'process' table
       t.datetime :summary_date

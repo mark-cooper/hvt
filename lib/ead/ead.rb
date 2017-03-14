@@ -14,6 +14,7 @@ module EAD
 
   HVT_URL   = "http://www.library.yale.edu/mssa/"
   HVT_TITLE = "Fortunoff Video Archive of Holocaust Testimonies"
+  HVT_BIB   = "This finding aid, which is compliant with the Yale EAD Best Practice Guidelines, Version 1.0., has a MARC record in Yale's ILS with the following bib number:"
 
   # subjects = EAD.get_authorities(record, SubjectAuthority, :subject_authorities) etc.
   def self.get_authorities(record, klass, association_method)

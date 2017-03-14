@@ -12,6 +12,7 @@ module Paradox
           collection: row["Collection"],
           count: row["Master count"].to_i,
           stock: row["Master stock"],
+          bib_id: row["VoyagerKey"],
         }
         # break
       end
