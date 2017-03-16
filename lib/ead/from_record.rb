@@ -70,7 +70,7 @@ module EAD
 
       related_materials << {
         "Copy and Version Identification" => record.identification_stmt
-        } if record.identification_stmt
+      } if record.identification_stmt
 
       gen.add_related_materials related_materials, false
 
@@ -93,6 +93,7 @@ module EAD
       grp_tapes = EAD.group_tapes_by_type(record)
 
       grp_tapes.each do |type, tapes|
+        next if type.nil? or type.empty?
         c01  = gen.add_c01(EAD.id_for_recording_type(type))
         EAD.handle_tapes_for c01, type, tapes
       end
