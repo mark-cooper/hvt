@@ -32,7 +32,7 @@ module EAD
 
       dates = record.date_expression.split(" and ") rescue []
       dates.each do |d|
-        gen.unitdate = d
+        gen.unitdate = Date.parse(d) rescue nil
       end
 
       gen.add_extent "#{record.extent.to_s} Videocassettes (#{record.stock})"
