@@ -32,7 +32,7 @@ module MRC
       record = Record.create!(id: id) unless record
 
       record.identifier          = MRC.subfield_value_for(r['910'],'b')
-      record.title               = MRC.subfields_to_s(r['245'])
+      record.title               = MRC.subfield_value_for(r['245'],'a').gsub(/\(HVT-\d+\)/, "").strip
       record.date_expression     = MRC.subfield_value_for(r['245'],'f')
       record.publication_date    = MRC.subfield_value_for(r['260'],'c')
       record.extent_expression   = MRC.subfields_to_s(r['300'])
