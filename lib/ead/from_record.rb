@@ -31,9 +31,13 @@ module EAD
       gen.unitid     = "HVT-#{record.id}"
       gen.unittitle  = record.title
 
-      dates = record.date_expression.split(" and ") rescue []
+      # try to get all the dates we have ...
+      dates = record.date_expression.split(" and ").map { |d| Date.parse(d).to_date.to_s } rescue []
+      dates = dates.concat(record.interviews.map{ |i|
+        i[:date] ? i[:date].to_date.to_s : nil
+      }).compact.sort.uniq
       dates.each do |d|
-        gen.unitdate = Date.parse(d) rescue nil
+        gen.unitdate = d rescue nil
       end
 
       gen.add_extent "#{record.extent.to_s} Videocassettes (#{record.stock})"

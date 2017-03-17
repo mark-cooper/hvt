@@ -49,7 +49,7 @@ module EAD
     component.add_extent "#{tapes.count.to_s} Videocassettes (#{tapes[0].format})"
 
     if tapes[0].date
-      component.add_physfacet_date "Created from #{tapes[0].source}, ", tapes[0].date
+      component.add_physfacet_date "Created from #{tapes[0].source}, ", tapes[0].date.to_date.to_s
     else
       component.add_physfacet "Created from #{tapes[0].source}."
     end
