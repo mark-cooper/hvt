@@ -14,7 +14,9 @@ namespace :ead do
   desc 'Create an EAD from all HVT records'
   task from_all: :environment do
     collections = {}
-    Collection.all.each do |collection|
+    Collection.all.includes([
+      records: [:interviews, :tapes]
+    ]).references(:records).each do |collection|
       records = collection.records.find_all { |r| r.has_mrc }
       collections[collection] = records
     end
@@ -24,7 +26,9 @@ namespace :ead do
 
   desc 'Create an EAD from each HVT collection'
   task from_collection: :environment do
-    Collection.all.each do |collection|
+    Collection.all.includes([
+      records: [:interviews, :tapes]
+    ]).references(:records).each do |collection|
       records = collection.records.find_all { |r| r.has_mrc }
       ead     = EAD::FromCollection.process(collection, records)
       write "HVT-#{collection.name.gsub(/\s/, '_')}.xml", ead
@@ -33,7 +37,10 @@ namespace :ead do
 
   desc 'Create an EAD from each HVT record'
   task from_single: :environment do
-    Record.where(has_mrc: true).all.each do |record|
+    Record.where(has_mrc: true).all.includes([
+      :interviews,
+      :tapes,
+    ]).references(:interviews, :tapes).each do |record|
       ead = EAD::FromRecord.process(record)
       write "HVT-#{record.id}.xml", ead
     end
