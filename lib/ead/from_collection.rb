@@ -6,6 +6,8 @@ module EAD
       puts "Generating EAD for HVT #{collection.name}"
       gen = EAD::Generator.new
 
+      rrcount = 0
+
       # boilerplate
       # TODO
 
@@ -15,7 +17,8 @@ module EAD
       gen.unittitle  = collection.name
 
       records.each do |record|
-        puts "Processing record #{record.id}"
+        rrcount += 1
+        puts "Processing record #{rrcount.to_s}: HVT-#{record.id}"
         record_id     = "hvt_#{record.id}"
         c01           = gen.add_c01(record_id)
         c01.level     = "otherlevel"

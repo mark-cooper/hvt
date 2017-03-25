@@ -6,6 +6,9 @@ module EAD
       puts "Generating EAD for #{EAD::HVT_TITLE}"
       gen = EAD::Generator.new
 
+      ccount = 0
+      rcount = 0
+
       # boilerplate
       # TODO
 
@@ -15,14 +18,16 @@ module EAD
       gen.unittitle  = EAD::HVT_TITLE
 
       collections.each do |collection, records|
-        puts "Processing collection #{collection.name}"
+        ccount += 1
+        puts "Processing collection #{ccount.to_s}: #{collection.name}"
         collection_id  = EAD.id_for("hvt_#{collection.name}")
         c01 = gen.add_c01 collection_id
         c01.level = "series"
         c01.unittitle = collection.name
 
         records.each do |record|
-          puts "Processing record #{record.id}"
+          rcount += 1
+          puts "Processing record #{rcount.to_s}: HVT-#{record.id}"
           record_id     = "hvt_#{record.id}"
           c02           = gen.add_c02_by_parent_id(collection_id, record_id)
           c02.level     = "otherlevel"
