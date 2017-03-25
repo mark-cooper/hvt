@@ -51,11 +51,11 @@ module EAD
 
       record.interviews.each do |interview|
         interviewees = interview.interviewees.all.map {
-          |i| { type: "persname", name: i[:name], role: "ive", source: "lcsh" }
+          |i| { type: "persname", name: i[:name], role: "ive", source: "local_mssa" }
         }
 
         interviewers = interview.interviewers.all.map {
-          |i| { type: "persname", name: i[:name], role: "ivr", source: "lcsh" }
+          |i| { type: "persname", name: i[:name], role: "ivr", source: "local_mssa" }
         }
         originations.concat interviewees
         originations.concat interviewers
