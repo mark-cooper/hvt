@@ -27,6 +27,7 @@ gem 'puma', '~> 3.0'
 # gem 'rack-cors'
 gem 'marc'
 gem "ead", github: "lyrasis/ead", branch: "master"
+gem "activerecord-import", ">= 0.11.0"
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

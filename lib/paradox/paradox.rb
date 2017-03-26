@@ -35,9 +35,11 @@ module Paradox
   end
 
   def self.create_collections(collections)
+    import_collections = []
     collections.each do |collection|
-      Collection.create!(name: collection)
+      import_collections << Collection.new(name: collection)
     end
+    Collection.import import_collections
   end
 
   def self.create_records(records)

@@ -22,14 +22,16 @@ module MRC
   end
 
   def self.create_records(records)
-    authorities = {}
+    import_records = []
+    authorities    = {}
 
     records.each do |id, mrc|
       r = mrc # alias for convenience
 
       # create record
       record = Record.find(id) rescue nil
-      record = Record.create!(id: id) unless record
+      next if record
+      record = Record.new(id: id)
 
       record.identifier          = MRC.subfield_value_for(r['910'],'b')
       record.title               = MRC.subfield_value_for(r['245'],'a').gsub(/\(HVT-\d+\)/, "").strip
@@ -52,8 +54,10 @@ module MRC
       MRC.add_authorities(record, r, authorities, '695', 'GenreAuthority', 'local')
 
       record.has_mrc = true
-      record.save
+      import_records << record
     end
+
+    Record.import import_records
   end
 
   def self.find_or_create_authority!(type, name, source)

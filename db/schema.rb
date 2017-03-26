@@ -111,6 +111,7 @@ ActiveRecord::Schema.define(version: 20170301154547) do
     t.text     "citation",            limit: 65535
     t.text     "related_record_stmt", limit: 65535
     t.text     "identification_stmt", limit: 65535
+    t.string   "bib_id"
     t.datetime "summary_date"
     t.datetime "cataloged_date"
     t.datetime "input_date"
