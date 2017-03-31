@@ -24,6 +24,8 @@ module EAD
         c01.level     = "otherlevel"
         c01.unittitle = record.title
 
+        c01.prefercite = record.citation if record.citation
+        c01.add_originations EAD.get_originations(record)
         grp_tapes = EAD.group_tapes_by_type(record)
 
         grp_tapes.each do |type, tapes|

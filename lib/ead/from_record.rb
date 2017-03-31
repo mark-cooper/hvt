@@ -43,25 +43,7 @@ module EAD
       gen.add_extent "#{record.extent.to_s} Videocassettes (#{record.stock})"
 
       gen.prefercite = record.citation if record.citation
-
-      originations = []
-      originations << {
-        type: "corpname", name: "Holocaust Survivors Film Project", role: "pro", source: "local"
-      }
-
-      record.interviews.each do |interview|
-        interviewees = interview.interviewees.all.map {
-          |i| { type: "persname", name: i[:name], role: "ive", source: "local_mssa" }
-        }
-
-        interviewers = interview.interviewers.all.map {
-          |i| { type: "persname", name: i[:name], role: "ivr", source: "local_mssa" }
-        }
-        originations.concat interviewees
-        originations.concat interviewers
-      end
-
-      gen.add_originations originations
+      gen.add_originations EAD.get_originations(record)
 
       odds = []
       odds << { "Publication Date" => record.publication_date } if record.publication_date
