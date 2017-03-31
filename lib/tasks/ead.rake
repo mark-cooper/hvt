@@ -3,7 +3,6 @@ require_relative "../ead/ead.rb"
 namespace :ead do
   HVT_EAD_DIR = ENV.fetch('HVT_EAD_DIR', "db/ead")
   FileUtils.mkdir_p HVT_EAD_DIR
-  FileUtils.rm_rf(Dir.glob("#{HVT_EAD_DIR}/*.xml"))
 
   def write(filename, ead)
     File.open(File.join(HVT_EAD_DIR, filename), 'w:UTF-8') do |f|
@@ -15,7 +14,7 @@ namespace :ead do
   task from_all: :environment do
     collections = {}
     Collection.all.includes([
-      records: [:interviews, :tapes]
+      records: [:interviews, :proofs, :tapes]
     ]).references(:records).each do |collection|
       records = collection.records.find_all { |r| r.has_mrc }
       collections[collection] = records
@@ -27,7 +26,7 @@ namespace :ead do
   desc 'Create an EAD from each HVT collection'
   task from_collection: :environment do
     Collection.all.includes([
-      records: [:interviews, :tapes]
+      records: [:interviews, :proofs, :tapes]
     ]).references(:records).each do |collection|
       records = collection.records.find_all { |r| r.has_mrc }
       ead     = EAD::FromCollection.process(collection, records)
@@ -39,8 +38,9 @@ namespace :ead do
   task from_single: :environment do
     Record.where(has_mrc: true).all.includes([
       :interviews,
+      :proofs,
       :tapes,
-    ]).references(:interviews, :tapes).each do |record|
+    ]).references(:interviews, :proofs, :tapes).each do |record|
       ead = EAD::FromRecord.process(record)
       write "HVT-#{record.id}.xml", ead
     end
