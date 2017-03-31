@@ -31,8 +31,12 @@ module EAD
           c02.level     = "otherlevel"
           c02.unittitle = record.title
 
-          grp_tapes = EAD.group_tapes_by_type(record)
+          c02.prefercite = record.citation if record.citation
+          c02.add_originations EAD.get_originations(record)
 
+          c02.add_authorities EAD.get_all_authorities(record)
+
+          grp_tapes = EAD.group_tapes_by_type(record)
           grp_tapes.each do |type, tapes|
             c03 = gen.add_c03_by_parent_id(record_id, EAD.id_for_recording_type(type, record.id))
             EAD.handle_tapes_for c03, type, tapes
