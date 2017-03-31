@@ -24,6 +24,25 @@ module EAD
   }
   HVT_URL   = "http://www.library.yale.edu/mssa/"
 
+  def self.add_boilerplate(ead)
+    # boilerplate
+    ead.publisher = "Manuscripts and Archives"
+    ead.address   = EAD::HVT_ADDRESS
+
+    addr_last_idx = EAD::HVT_ADDRESS.count - 1
+    path = ead.ead.eadheader.filedesc.publicationstmt.address.addressline(addr_last_idx)
+    path.extptr.xlink_href  = EAD::HVT_URL
+    path.extptr.xlink_show  = "new"
+    path.extptr.xlink_title = EAD::HVT_URL
+    path.extptr.xlink_type  = "simple"
+
+    ead.set_create_date(Time.now.to_s, "This finding aid was produced for ArchivesSpace using HVT (micro-app) on ")
+    ead.descrules = "dacs"
+
+    ead.set_language "English", "eng"
+    ead.repository = "Manuscripts and Archives"
+  end
+
   # subjects = EAD.get_authorities(record, SubjectAuthority, :subject_authorities) etc.
   def self.get_authorities(record, klass, association_method)
     record.send(association_method).all.map {

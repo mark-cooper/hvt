@@ -5,12 +5,10 @@ module EAD
     def self.process(collections)
       puts "Generating EAD for #{EAD::HVT_TITLE}"
       gen = EAD::Generator.new
+      EAD.add_boilerplate gen
 
       ccount = 0
       rcount = 0
-
-      # boilerplate
-      # TODO
 
       # records specific
       gen.set_title EAD::HVT_TITLE, "MS.1322", " "

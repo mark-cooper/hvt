@@ -5,11 +5,9 @@ module EAD
     def self.process(collection, records)
       puts "Generating EAD for HVT #{collection.name}"
       gen = EAD::Generator.new
+      EAD.add_boilerplate gen
 
       rrcount = 0
-
-      # boilerplate
-      # TODO
 
       # collection specific
       gen.set_title collection.name, "HVT.COLL.#{collection.id.to_s}", " "

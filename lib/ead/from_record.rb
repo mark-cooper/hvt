@@ -5,23 +5,7 @@ module EAD
     def self.process(record)
       puts "Generating EAD for HVT #{record.id}: #{record.title}"
       gen = EAD::Generator.new
-
-      # boilerplate
-      gen.publisher = "Manuscripts and Archives"
-      gen.address   = EAD::HVT_ADDRESS
-
-      addr_last_idx = EAD::HVT_ADDRESS.count - 1
-      path = gen.ead.eadheader.filedesc.publicationstmt.address.addressline(addr_last_idx)
-      path.extptr.xlink_href  = EAD::HVT_URL
-      path.extptr.xlink_show  = "new"
-      path.extptr.xlink_title = EAD::HVT_URL
-      path.extptr.xlink_type  = "simple"
-
-      gen.set_create_date(Time.now.to_s, "This finding aid was produced for ArchivesSpace using HVT (micro-app) on ")
-      gen.descrules = "dacs"
-
-      gen.set_language "English", "eng"
-      gen.repository = "Manuscripts and Archives"
+      EAD.add_boilerplate gen
 
       # record specific
       gen.eadid = "mssa.hvt.#{record.id.to_s.rjust(5, '0')}"
