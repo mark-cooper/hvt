@@ -26,8 +26,10 @@ module EAD
 
         c01.prefercite = record.citation if record.citation
         c01.add_originations EAD.get_originations(record)
-        grp_tapes = EAD.group_tapes_by_type(record)
 
+        c01.add_authorities EAD.get_all_authorities(record)
+
+        grp_tapes = EAD.group_tapes_by_type(record)
         grp_tapes.each do |type, tapes|
           c02 = gen.add_c02_by_parent_id(record_id, EAD.id_for_recording_type(type, record.id))
           EAD.handle_tapes_for c02, type, tapes

@@ -31,6 +31,24 @@ module EAD
     }
   end
 
+  def self.get_all_authorities(record)
+    authorities = []
+
+    subjects   = EAD.get_authorities(record, SubjectAuthority, :subject_authorities)
+    geognames  = EAD.get_authorities(record, GeographicAuthority, :geographic_authorities)
+    genreforms = EAD.get_authorities(record, GenreAuthority, :genre_authorities)
+    persnames  = EAD.get_authorities(record, PersonAuthority, :person_authorities)
+    corpnames  = EAD.get_authorities(record, CorporateAuthority, :corporate_authorities)
+
+    authorities.concat subjects
+    authorities.concat geognames
+    authorities.concat genreforms
+    authorities.concat persnames
+    authorities.concat corpnames
+
+    authorities
+  end
+
   def self.get_originations(record)
     originations = []
     originations << {

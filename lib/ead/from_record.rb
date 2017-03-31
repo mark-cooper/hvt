@@ -61,24 +61,9 @@ module EAD
 
       gen.add_related_materials related_materials, false
 
-      authorities = []
-
-      subjects   = EAD.get_authorities(record, SubjectAuthority, :subject_authorities)
-      geognames  = EAD.get_authorities(record, GeographicAuthority, :geographic_authorities)
-      genreforms = EAD.get_authorities(record, GenreAuthority, :genre_authorities)
-      persnames  = EAD.get_authorities(record, PersonAuthority, :person_authorities)
-      corpnames  = EAD.get_authorities(record, CorporateAuthority, :corporate_authorities)
-
-      authorities.concat subjects
-      authorities.concat geognames
-      authorities.concat genreforms
-      authorities.concat persnames
-      authorities.concat corpnames
-
-      gen.add_authorities authorities
+      gen.add_authorities EAD.get_all_authorities(record)
 
       grp_tapes = EAD.group_tapes_by_type(record)
-
       grp_tapes.each do |type, tapes|
         next if type.nil? or type.empty?
         c01  = gen.add_c01(EAD.id_for_recording_type(type))
