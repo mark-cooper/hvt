@@ -22,7 +22,6 @@ module MRC
   end
 
   def self.create_records(records)
-    import_records = []
     authorities    = {}
 
     records.each do |id, mrc|
@@ -54,10 +53,8 @@ module MRC
       MRC.add_authorities(record, r, authorities, '695', 'GenreAuthority', 'local')
 
       record.has_mrc = true
-      import_records << record
+      record.save
     end
-
-    Record.import import_records
   end
 
   def self.find_or_create_authority!(type, name, source)
