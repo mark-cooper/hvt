@@ -7,15 +7,14 @@ module EAD
       gen = EAD::Generator.new
       EAD.add_boilerplate gen
 
-      ccount = 0
-      rcount = 0
-
       # records specific
       gen.set_title EAD::HVT_TITLE, "MS.1322", " "
       gen.unitid     = "1"
       gen.unittitle  = EAD::HVT_TITLE
 
-      collections.each do |collection, records|
+      ccount = 0
+      rcount = 0
+      collections.each do |collection|
         ccount += 1
         puts "Processing collection #{ccount.to_s}: #{collection.name}"
         collection_id  = EAD.id_for("hvt_#{collection.name}")
@@ -23,7 +22,12 @@ module EAD
         c01.level = "series"
         c01.unittitle = collection.name
 
-        records.each do |record|
+        collection.records.where(has_mrc: true).includes([
+          :interviews,
+          :proofs,
+          :tapes,
+        ]).references(:interviews, :proofs, :tapes)
+            .find_each(batch_size: 10).lazy.each do |record|
           rcount += 1
           puts "Processing record #{rcount.to_s}: HVT-#{record.id}"
           record_id     = "hvt_#{record.id}"

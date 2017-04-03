@@ -2,7 +2,7 @@ module EAD
 
   module FromCollection
 
-    def self.process(collection, records)
+    def self.process(collection)
       puts "Generating EAD for HVT #{collection.name}"
       gen = EAD::Generator.new
       EAD.add_boilerplate gen
@@ -16,9 +16,15 @@ module EAD
       gen.unittitle  = collection.name
 
       rrcount = 0
-      records.each do |record|
+      collection.records.where(has_mrc: true).includes([
+        :interviews,
+        :proofs,
+        :tapes,
+      ]).references(:interviews, :proofs, :tapes)
+          .find_each(batch_size: 10).lazy.each do |record|
         rrcount += 1
         puts "Processing record #{rrcount.to_s}: HVT-#{record.id}"
+
         record_id     = "hvt_#{record.id}"
         c01           = gen.add_c01(record_id)
         c01.level     = "otherlevel"

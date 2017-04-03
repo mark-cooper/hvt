@@ -12,12 +12,9 @@ namespace :ead do
 
   desc 'Create an EAD from all HVT records'
   task from_all: :environment do
-    collections = {}
-    Collection.all.includes([
-      records: [:interviews, :proofs, :tapes]
-    ]).references(:records).each do |collection|
-      records = collection.records.find_all { |r| r.has_mrc }
-      collections[collection] = records
+    collections = []
+    Collection.find_each(batch_size: 10) do |collection|
+      collections << collection
     end
     ead = EAD::FromRecords.process(collections)
     write "HVT-all.xml", ead
@@ -25,22 +22,21 @@ namespace :ead do
 
   desc 'Create an EAD from each HVT collection'
   task from_collection: :environment do
-    Collection.all.includes([
-      records: [:interviews, :proofs, :tapes]
-    ]).references(:records).each do |collection|
-      records = collection.records.find_all { |r| r.has_mrc }
-      ead     = EAD::FromCollection.process(collection, records)
+    Collection.find_each(batch_size: 10) do |collection|
+      ead     = EAD::FromCollection.process(collection)
       write "HVT-#{collection.name.gsub(/\s/, '_')}.xml", ead
+      break
     end
   end
 
   desc 'Create an EAD from each HVT record'
   task from_single: :environment do
-    Record.where(has_mrc: true).all.includes([
+    Record.where(has_mrc: true).includes([
       :interviews,
       :proofs,
       :tapes,
-    ]).references(:interviews, :proofs, :tapes).each do |record|
+    ]).references(:interviews, :proofs, :tapes)
+        .find_each(batch_size: 10).lazy.each do |record|
       ead = EAD::FromRecord.process(record)
       write "HVT-#{record.id}.xml", ead
     end
