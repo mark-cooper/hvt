@@ -68,6 +68,15 @@ module EAD
     authorities
   end
 
+  def self.get_all_dates(record)
+    # try to get all the dates we have ...
+    dates = record.date_expression.split(" and ").map { |d| Date.parse(d).to_date.to_s } rescue []
+    dates = dates.concat(record.interviews.map{ |i|
+      i[:date] ? i[:date].to_date.to_s : nil
+    }).compact.sort.uniq
+    dates
+  end
+
   def self.get_originations(record)
     originations = []
     originations << {

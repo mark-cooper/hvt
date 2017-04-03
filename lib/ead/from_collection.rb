@@ -7,13 +7,15 @@ module EAD
       gen = EAD::Generator.new
       EAD.add_boilerplate gen
 
-      rrcount = 0
-
       # collection specific
+      # gen.eadid
       gen.set_title collection.name, "HVT.COLL.#{collection.id.to_s}", " "
+      gen.author = EAD::HVT_AUTHOR
+      gen.set_note(EAD::HVT_BIB, "bpg", record.bib_id, " ", "Orbis-bib")
       gen.unitid     = collection.id.to_s
       gen.unittitle  = collection.name
 
+      rrcount = 0
       records.each do |record|
         rrcount += 1
         puts "Processing record #{rrcount.to_s}: HVT-#{record.id}"
@@ -22,8 +24,17 @@ module EAD
         c01.level     = "otherlevel"
         c01.unittitle = record.title
 
+        dates = EAD.get_all_dates record
+        dates.each do |d|
+          c01.unitdate = d rescue nil
+        end
+
+        c01.add_extent "#{record.extent.to_s} Videocassettes (#{record.stock})"
+
         c01.prefercite = record.citation if record.citation
         c01.add_originations EAD.get_originations(record)
+
+        # odds
 
         c01.add_authorities EAD.get_all_authorities(record)
 
