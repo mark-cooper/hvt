@@ -11,7 +11,7 @@ module EAD
       # gen.eadid
       gen.set_title collection.name, "HVT.COLL.#{collection.id.to_s}", " "
       gen.author = EAD::HVT_AUTHOR
-      gen.set_note(EAD::HVT_BIB, "bpg", record.bib_id, " ", "Orbis-bib")
+      gen.set_note(EAD::HVT_BIB, "bpg", collection.id, " ", "Orbis-bib")
       gen.unitid     = collection.id.to_s
       gen.unittitle  = collection.name
 
@@ -31,6 +31,7 @@ module EAD
 
         c01.add_extent "#{record.extent.to_s} Videocassettes (#{record.stock})"
 
+        c01.abstract   = record.abstract if record.abstract
         c01.prefercite = record.citation if record.citation
         c01.add_originations EAD.get_originations(record)
 

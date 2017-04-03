@@ -22,12 +22,12 @@ module EAD
 
       gen.add_extent "#{record.extent.to_s} Videocassettes (#{record.stock})"
 
+      gen.abstract   = record.abstract if record.abstract
       gen.prefercite = record.citation if record.citation
       gen.add_originations EAD.get_originations(record)
 
       odds = []
       odds << { "Publication Date" => record.publication_date } if record.publication_date
-      odds << { "Summary" => record.abstract } if record.abstract
       gen.add_odds odds, false
 
       related_materials = []
