@@ -35,6 +35,14 @@ module EAD
           c02.level     = "otherlevel"
           c02.unittitle = record.title
 
+          dates = EAD.get_all_dates record
+          dates.each do |d|
+            c02.unitdate = d rescue nil
+          end
+
+          c02.add_extent "#{record.extent.to_s} Videocassettes (#{record.stock})"
+
+          c02.abstract   = record.abstract if record.abstract
           c02.prefercite = record.citation if record.citation
           c02.add_originations EAD.get_originations(record)
 
