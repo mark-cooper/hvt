@@ -20,7 +20,7 @@ module EAD
         gen.unitdate = d rescue nil
       end
 
-      gen.add_extent "#{record.extent.to_s} Videocassettes (#{record.stock})"
+      gen.add_extent EAD.get_extent_for_record(record)
 
       gen.abstract   = record.abstract if record.abstract
       gen.prefercite = record.citation if record.citation

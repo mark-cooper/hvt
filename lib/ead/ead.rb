@@ -71,10 +71,19 @@ module EAD
   def self.get_all_dates(record)
     # try to get all the dates we have ...
     dates = record.date_expression.split(" and ").map { |d| Date.parse(d).to_date.to_s } rescue []
+    dates << record.date_expression[0..3] if record.date_expression =~ /^\d{4}\.$/
     dates = dates.concat(record.interviews.map{ |i|
       i[:date] ? i[:date].to_date.to_s : nil
     }).compact.sort.uniq
     dates
+  end
+
+  def self.get_extent_for_collection(collection)
+    # TODO
+  end
+
+  def self.get_extent_for_record(record)
+    record.extent > 0 ? "#{record.extent.to_s} Videocassettes (#{record.stock})" : "0 Videocassettes"
   end
 
   def self.get_originations(record)
