@@ -140,8 +140,9 @@ module EAD
   end
 
   # EAD.id_for_recording_type(tape.recording_type)
-  def self.id_for_recording_type(recording_type, prefix = nil)
+  def self.id_for_recording_type(recording_type, prefix = nil, strip_chars = '(\(|\)|&)')
     recording_type = "#{prefix.to_s}_#{recording_type}" if prefix
+    recording_type = recording_type.gsub(/#{strip_chars}/, '') if recording_type =~ /#{strip_chars}/
     EAD.id_for recording_type
   end
 
