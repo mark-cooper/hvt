@@ -70,8 +70,14 @@ module EAD
 
   def self.get_all_dates(record)
     # try to get all the dates we have ...
-    dates = record.date_expression.split(" and ").map { |d| Date.parse(d).to_date.to_s } rescue []
-    dates << record.date_expression[0..3] if record.date_expression =~ /^\d{4}\.$/
+    dates = record.date_expression.split(" and ") rescue []
+    dates = dates.map do |d|
+      begin
+        Date.parse(d).to_date.to_s
+      rescue
+        d =~ /^\d{4}\.?/ ? d[0..3] : nil
+      end
+    end
     dates = dates.concat(record.interviews.map{ |i|
       i[:date] ? i[:date].to_date.to_s : nil
     }).compact.sort.uniq
