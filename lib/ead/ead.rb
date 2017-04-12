@@ -136,11 +136,16 @@ module EAD
     end
 
     tapes.each do |t|
-      component.add_physfacet_corpname "Tape #{t.number.to_s}: ", t.manufacturer
-
-      if t.shared_with > 0
-        component.add_physfacet "Tape #{t.number.to_s} is shared with HVT-#{t.shared_with.to_s} #{type} Tape 1."
+      if t.manufacturer and not t.manufacturer.empty?
+        component.add_physfacet_corpname "Tape #{t.number.to_s} (#{t.barcode}): ", t.manufacturer
+      else
+        component.add_physfacet "Tape #{t.number.to_s} (#{t.barcode})."
       end
+
+      # REDUNDANT: use instance link for relationship
+      # if t.shared_with > 0
+      #   component.add_physfacet "Tape #{t.number.to_s} is shared with HVT-#{t.shared_with.to_s} #{type} Tape 1."
+      # end
     end
 
     component.add_containers(

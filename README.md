@@ -24,6 +24,12 @@ A micro-app for aggregating data from Paradox db and mrc records.
 ./bin/rake db:fix_missing_barcodes && \
   ./bin/rake db:normalize_barcodes && \
   ./bin/rake db:set_fake_barcodes
+
+
+# generating EAD
+bundler exec rake ead:from_single
+bundler exec rake ead:from_collection
+
 ```
 
 ---
