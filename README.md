@@ -20,8 +20,10 @@ A micro-app for aggregating data from Paradox db and mrc records.
   ./bin/rake db:populate_from_mrc && \
   ./bin/rake db:populate_from_paradox
 
-# fix missing barcodes
-./bin/rake db:fix_missing_barcodes
+# address barcodes (order is important)
+./bin/rake db:fix_missing_barcodes && \
+  ./bin/rake db:normalize_barcodes && \
+  ./bin/rake db:set_fake_barcodes
 ```
 
 ---

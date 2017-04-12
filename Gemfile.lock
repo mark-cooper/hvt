@@ -49,6 +49,7 @@ GEM
       minitest (~> 5.1)
       tzinfo (~> 1.1)
     arel (7.1.4)
+    awesome_print (1.7.0)
     builder (3.2.3)
     byebug (9.0.6)
     concurrent-ruby (1.0.4)
@@ -154,6 +155,7 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord-import (>= 0.11.0)
+  awesome_print
   byebug
   ead!
   faker
