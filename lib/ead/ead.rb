@@ -85,7 +85,7 @@ module EAD
   end
 
   def self.get_extent_for_collection(collection)
-    # TODO
+    collection.extent > 0 ? "#{collection.extent.to_s} Videocassettes" : "0 Videocassettes"
   end
 
   def self.get_extent_for_record(record)

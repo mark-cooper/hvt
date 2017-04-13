@@ -15,6 +15,13 @@ module EAD
       gen.unitid     = collection.id.to_s
       gen.unittitle  = collection.name
 
+      dates = [collection.begin_date, collection.end_date].compact
+      dates.each do |d|
+        gen.unitdate = d rescue nil
+      end
+
+      gen.add_extent EAD.get_extent_for_collection(collection)
+
       rrcount = 0
       collection.records.where(has_mrc: true).includes([
         :interviews,
@@ -41,7 +48,20 @@ module EAD
         c01.prefercite = record.citation if record.citation
         c01.add_originations EAD.get_originations(record)
 
-        # odds
+        odds = []
+        odds << { "Publication Date" => record.publication_date } if record.publication_date
+        c01.add_odds odds, false
+
+        related_materials = []
+        related_materials << {
+          "Related Archival Materials" => record.related_record_stmt
+        } if record.related_record_stmt
+
+        related_materials << {
+          "Copy and Version Identification" => record.identification_stmt
+        } if record.identification_stmt
+
+        c01.add_related_materials related_materials, false
 
         c01.add_authorities EAD.get_all_authorities(record)
 
