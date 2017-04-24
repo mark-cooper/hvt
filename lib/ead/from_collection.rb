@@ -9,7 +9,7 @@ module EAD
 
       # collection specific
       # gen.eadid
-      gen.set_title collection.name, "HVT.COLL.#{collection.id.to_s}", " "
+      gen.set_title collection.name
       gen.author = EAD::HVT_AUTHOR
       gen.set_note(EAD::HVT_BIB, "bpg", collection.id, " ", "Orbis-bib")
       gen.unitid     = collection.id.to_s

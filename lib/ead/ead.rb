@@ -131,11 +131,24 @@ module EAD
 
   def self.group_tapes_by_type(record)
     tapes = Hash.new { |hash, key| hash[key] = [] }
-    record.tapes.each do |tape|
-      # group tapes by recording type
-      # each distinct type is ONE c0*
-      # each tape is a container element
-      tapes[tape.recording_type] << tape
+    # want tapes in this order ...
+    [
+      "Master",
+      "Camera",
+      "Duplicate",
+      "Submaster",
+      "Restoration master",
+      "Restoration submaster",
+      "Field acquisition (master)",
+      "Licensing copy",
+      "Use copy",
+      "Digital Betacam Home",
+      "Digital Betacam M&E",
+      "Digital Betacam PBS",
+    ].each do |type|
+      record.tapes.where(recording_type: type).each do |tape|
+        tapes[type] << tape
+      end
     end
     tapes
   end

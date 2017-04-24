@@ -9,7 +9,7 @@ module EAD
 
       # record specific
       gen.eadid = "mssa.hvt.#{record.id.to_s.rjust(4, '0')}"
-      gen.set_title record.title, "HVT.#{record.id}", " "
+      gen.set_title record.title
       gen.author = EAD::HVT_AUTHOR
       gen.set_note(EAD::HVT_BIB, "bpg", record.bib_id, " ", "Orbis-bib")
       gen.unitid     = "HVT-#{record.id}"

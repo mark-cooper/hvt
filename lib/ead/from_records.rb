@@ -8,8 +8,8 @@ module EAD
       EAD.add_boilerplate gen
 
       # records specific
-      gen.set_title EAD::HVT_TITLE, "MS.1322", " "
-      gen.unitid     = "1"
+      gen.set_title EAD::HVT_TITLE
+      gen.unitid     = "MS.1322"
       gen.unittitle  = EAD::HVT_TITLE
 
       ccount = 0
