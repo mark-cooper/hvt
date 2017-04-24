@@ -43,31 +43,15 @@ module EAD
         end
 
         c01.add_extent EAD.get_extent_for_record(record)
-
         c01.abstract   = record.abstract if record.abstract
         c01.prefercite = record.citation if record.citation
         c01.add_originations EAD.get_originations(record)
-
-        odds = []
-        odds << { "Publication Date" => record.publication_date } if record.publication_date
-        c01.add_odds odds, false
-
-        related_materials = []
-        related_materials << {
-          "Related Archival Materials" => record.related_record_stmt
-        } if record.related_record_stmt
-
-        related_materials << {
-          "Copy and Version Identification" => record.identification_stmt
-        } if record.identification_stmt
-
-        c01.add_related_materials related_materials, false
-
+        c01.add_related_materials(EAD.get_related_materials(record), false)
         c01.add_authorities EAD.get_all_authorities(record)
 
         grp_tapes = EAD.group_tapes_by_type(record)
         grp_tapes.each do |type, tapes|
-          c02 = gen.add_c02_by_parent_id(record_id, EAD.id_for_recording_type(type, record.id))
+          c02 = gen.add_c02_by_parent_id(record_id, EAD.random_id)
           EAD.handle_tapes_for c02, type, tapes
         end
       end

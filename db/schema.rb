@@ -62,8 +62,11 @@ ActiveRecord::Schema.define(version: 20170301154547) do
 
   create_table "collections", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.integer  "extent",     default: 0
+    t.datetime "begin_date"
+    t.datetime "end_date"
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
   end
 
   create_table "interviews", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -100,9 +103,11 @@ ActiveRecord::Schema.define(version: 20170301154547) do
   create_table "records", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "identifier"
     t.string   "title"
-    t.integer  "extent"
+    t.integer  "extent",                            default: 0
     t.string   "extent_expression"
     t.string   "stock"
+    t.string   "primary_source"
+    t.string   "secondary_source"
     t.string   "publication_date"
     t.string   "date_expression"
     t.integer  "collection_id"

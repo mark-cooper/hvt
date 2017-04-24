@@ -7,11 +7,15 @@ class CreateRecords < ActiveRecord::Migration[5.0]
       # $245[ahc]
       t.string     :title
       # 'primary' 'Master Count'
-      t.integer    :extent
+      t.integer    :extent, default: 0
       # $300 [physdesc][extent]
       t.string     :extent_expression
       # 'primary' 'Master stock'
       t.string     :stock
+      # $260b [origination creator]
+      t.string     :primary_source
+      # RAKE TASK (txt)
+      t.string     :secondary_source
       # $260c [odd]
       t.string     :publication_date
       # $245f [unitdate]

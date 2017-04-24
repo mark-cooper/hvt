@@ -8,7 +8,7 @@ module EAD
       EAD.add_boilerplate gen
 
       # record specific
-      gen.eadid = "mssa.hvt.#{record.id.to_s.rjust(5, '0')}"
+      gen.eadid = "mssa.hvt.#{record.id.to_s.rjust(4, '0')}"
       gen.set_title record.title, "HVT.#{record.id}", " "
       gen.author = EAD::HVT_AUTHOR
       gen.set_note(EAD::HVT_BIB, "bpg", record.bib_id, " ", "Orbis-bib")
@@ -21,32 +21,16 @@ module EAD
       end
 
       gen.add_extent EAD.get_extent_for_record(record)
-
       gen.abstract   = record.abstract if record.abstract
       gen.prefercite = record.citation if record.citation
       gen.add_originations EAD.get_originations(record)
-
-      odds = []
-      odds << { "Publication Date" => record.publication_date } if record.publication_date
-      gen.add_odds odds, false
-
-      related_materials = []
-      related_materials << {
-        "Related Archival Materials" => record.related_record_stmt
-      } if record.related_record_stmt
-
-      related_materials << {
-        "Copy and Version Identification" => record.identification_stmt
-      } if record.identification_stmt
-
-      gen.add_related_materials related_materials, false
-
+      gen.add_related_materials(EAD.get_related_materials(record), false)
       gen.add_authorities EAD.get_all_authorities(record)
 
       grp_tapes = EAD.group_tapes_by_type(record)
       grp_tapes.each do |type, tapes|
         next if type.nil? or type.empty?
-        c01  = gen.add_c01(EAD.id_for_recording_type(type))
+        c01  = gen.add_c01(EAD.random_id)
         EAD.handle_tapes_for c01, type, tapes
       end
 

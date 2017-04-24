@@ -1,3 +1,4 @@
+require "securerandom"
 require_relative "from_collection"
 require_relative "from_record"
 require_relative "from_records"
@@ -12,8 +13,8 @@ module EAD
     "URL: ",
   ]
   HVT_AUTHOR = "compiled by Staff of the Fortunoff Video Archive for Holocaust Testimonies"
-  HVT_BIB   = "This finding aid, which is compliant with the Yale EAD Best Practice Guidelines, Version 1.0., has a MARC record in Yale's ILS with the following bib number:"
-  HVT_TITLE = "Fortunoff Video Archive of Holocaust Testimonies"
+  HVT_BIB    = "This finding aid, which is compliant with the Yale EAD Best Practice Guidelines, Version 1.0., has a MARC record in Yale's ILS with the following bib number:"
+  HVT_TITLE  = "Fortunoff Video Archive of Holocaust Testimonies"
   HVT_TYPE_SUFFIX = {
     "Duplicate" => "D",
     "Licensing copy" => "LC",
@@ -22,7 +23,7 @@ module EAD
     "Submaster" => "S",
     "Use copy" => "U",
   }
-  HVT_URL   = "http://www.library.yale.edu/mssa/"
+  HVT_URL = "http://www.library.yale.edu/mssa/"
 
   def self.add_boilerplate(ead)
     # boilerplate
@@ -95,8 +96,12 @@ module EAD
   def self.get_originations(record)
     originations = []
     originations << {
-      type: "corpname", name: "Holocaust Survivors Film Project", role: "pro", source: "local"
-    }
+      type: "corpname", name: record.primary_source.gsub(/,$/, ''), role: "pro", source: "local"
+    } if record.primary_source
+
+    originations << {
+      type: "corpname", name: record.secondary_source, role: "pro", source: "local"
+    } if record.secondary_source
 
     record.interviews.each do |interview|
       interviewees = interview.interviewees.all.map {
@@ -110,6 +115,18 @@ module EAD
       originations.concat interviewers
     end
     originations
+  end
+
+  def self.get_related_materials(record)
+    related_materials = []
+    related_materials << {
+      "Related Archival Materials" => record.related_record_stmt
+    } if record.related_record_stmt
+
+    related_materials << {
+      "Copy and Version Identification" => record.identification_stmt
+    } if record.identification_stmt
+    related_materials
   end
 
   def self.group_tapes_by_type(record)
@@ -168,6 +185,10 @@ module EAD
 
   def self.number_for_recording_type(type, number)
     HVT_TYPE_SUFFIX.has_key?(type) ? "#{number.to_s}#{HVT_TYPE_SUFFIX[type]}" : number.to_s
+  end
+
+  def self.random_id
+    SecureRandom.hex
   end
 
 end

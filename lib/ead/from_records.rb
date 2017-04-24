@@ -41,16 +41,15 @@ module EAD
           end
 
           c02.add_extent EAD.get_extent_for_record(record)
-
           c02.abstract   = record.abstract if record.abstract
           c02.prefercite = record.citation if record.citation
           c02.add_originations EAD.get_originations(record)
-
+          c02.add_related_materials(EAD.get_related_materials(record), false)
           c02.add_authorities EAD.get_all_authorities(record)
 
           grp_tapes = EAD.group_tapes_by_type(record)
           grp_tapes.each do |type, tapes|
-            c03 = gen.add_c03_by_parent_id(record_id, EAD.id_for_recording_type(type, record.id))
+            c03 = gen.add_c03_by_parent_id(record_id, EAD.random_id)
             EAD.handle_tapes_for c03, type, tapes
           end
         end
