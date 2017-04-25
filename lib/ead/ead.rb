@@ -14,6 +14,21 @@ module EAD
   ]
   HVT_AUTHOR = "compiled by Staff of the Fortunoff Video Archive for Holocaust Testimonies"
   HVT_BIB    = "This finding aid, which is compliant with the Yale EAD Best Practice Guidelines, Version 1.0., has a MARC record in Yale's ILS with the following bib number:"
+  HVT_CONTAINER_PROFILES = {
+    "1 inch" => "video (2 inch)",
+    "35mm" => "film can (12d 2h 12w)",
+    "Betacam SP" => "video Beta",
+    "blank" => "videocassette",
+    "Digital Betacam" => "video Beta",
+    "DVCAM" => "video DV",
+    "DVD" => "DVD Case",
+    "Hard Drive" => "card box (6d 4h 7w)",
+    "Hi8" => "video Hi-8",
+    "MiniDV" => "video DV",
+    "U-Matic" => "U-matic",
+    "VHS" => "video VHS",
+    nil => "videocassette",
+  }
   HVT_TITLE  = "Fortunoff Video Archive of Holocaust Testimonies"
   HVT_TYPE_SUFFIX = {
     "Duplicate" => "D",
@@ -180,7 +195,12 @@ module EAD
 
     component.add_containers(
       tapes.map { |t|
-        { id: t.id, barcode: t.barcode, number: EAD.number_for_recording_type(type, t.number) }
+        {
+          id: t.id,
+          barcode: t.barcode,
+          number: EAD.number_for_recording_type(type, t.number),
+          profile: EAD::HVT_CONTAINER_PROFILES[t.format],
+        }
       }
     )
   end
