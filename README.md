@@ -25,12 +25,13 @@ Loading all data:
   ./bin/rake db:populate_from_paradox
 
 # update barcodes (order is important)
+# calculate extents
+# set secondary source for matching records
 ./bin/rake db:fix_missing_barcodes && \
   ./bin/rake db:normalize_barcodes && \
-  ./bin/rake db:set_fake_barcodes
-
-# set secondary source for matching records
-./bin/rake db:add_secondary_source[src.txt,"United States Holocaust Memorial Museum"]
+  ./bin/rake db:set_fake_barcodes && \
+  ./bin/rake db:calculate_extents && \
+  ./bin/rake db:add_secondary_source[src.txt,"United States Holocaust Memorial Museum"]
 ```
 
 Generating EAD:
