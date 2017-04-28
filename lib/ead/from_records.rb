@@ -47,6 +47,9 @@ module EAD
           c02.add_related_materials(EAD.get_related_materials(record), false)
           c02.add_authorities EAD.get_all_authorities(record)
 
+          c02.accessrestrict = record.access_restriction ? record.access_restriction : EAD::HVT_RESTRICT_ACCESS_STMT
+          c02.userestrict    = record.use_restriction ? "#{EAD::HVT_RESTRICT_USE_STMT}\n#{record.use_restriction}" : EAD::HVT_RESTRICT_USE_STMT
+
           grp_tapes = EAD.group_tapes_by_type(record)
           grp_tapes.each do |type, tapes|
             c03 = gen.add_c03_by_parent_id(record_id, EAD.random_id)

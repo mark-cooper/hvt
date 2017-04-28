@@ -28,8 +28,12 @@ class CreateRecords < ActiveRecord::Migration[5.0]
       t.text       :note
       # $524 [prefercite]
       t.text       :citation
+      # $540 [userestrict]
+      t.text       :use_restriction
       # $544 [relatedmaterial]
       t.text       :related_record_stmt
+      # $560 [accessrestrict]
+      t.text       :access_restriction
       # $562 [relatedmaterial]
       t.text       :identification_stmt
       # 'process' 'VoyagerKey'

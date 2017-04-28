@@ -29,6 +29,8 @@ module EAD
     "VHS" => "video VHS",
     nil => "videocassette",
   }
+  HVT_RESTRICT_ACCESS_STMT = "This testimony is open with permission."
+  HVT_RESTRICT_USE_STMT = "Copyright has been transferred to the Fortunoff Video Archive for Holocaust Testimonies. Use of this testimony requires permission of the Fortunoff Video Archive."
   HVT_TITLE  = "Fortunoff Video Archive of Holocaust Testimonies"
   HVT_TYPE_SUFFIX = {
     "Duplicate" => "D",

@@ -40,7 +40,9 @@ module MRC
       record.extent_expression   = MRC.subfields_to_s(r['300'])
       record.abstract            = MRC.subfields_to_s(r['520'])
       record.citation            = MRC.subfields_to_s(r['524'])
+      record.use_restriction     = MRC.subfields_to_s(r['540'])
       record.related_record_stmt = MRC.subfields_to_s(r['544'])
+      record.access_restriction  = MRC.subfields_to_s(r['560'])
       record.identification_stmt = MRC.subfields_to_s(r['562'])
       record.bib_id              = r['001'].value if r['001']
 

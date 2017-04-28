@@ -27,6 +27,9 @@ module EAD
       gen.add_related_materials(EAD.get_related_materials(record), false)
       gen.add_authorities EAD.get_all_authorities(record)
 
+      gen.accessrestrict = record.access_restriction ? record.access_restriction : EAD::HVT_RESTRICT_ACCESS_STMT
+      gen.userestrict    = record.use_restriction ? "#{EAD::HVT_RESTRICT_USE_STMT}\n#{record.use_restriction}" : EAD::HVT_RESTRICT_USE_STMT
+
       grp_tapes = EAD.group_tapes_by_type(record)
       grp_tapes.each do |type, tapes|
         next if type.nil? or type.empty?
