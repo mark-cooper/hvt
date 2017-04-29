@@ -114,7 +114,9 @@ ActiveRecord::Schema.define(version: 20170301154547) do
     t.text     "abstract",            limit: 65535
     t.text     "note",                limit: 65535
     t.text     "citation",            limit: 65535
+    t.text     "use_restriction",     limit: 65535
     t.text     "related_record_stmt", limit: 65535
+    t.text     "access_restriction",  limit: 65535
     t.text     "identification_stmt", limit: 65535
     t.string   "bib_id"
     t.datetime "summary_date"
