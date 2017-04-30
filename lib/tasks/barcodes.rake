@@ -53,7 +53,7 @@ namespace :db do
   desc 'Set a fake barcode for those with "0"'
   task set_fake_barcodes: :environment do
     Tape.where(barcode: "0").all.each do |tape|
-      barcode = "hvt_#{SecureRandom.hex}"
+      barcode = "hvt_#{SecureRandom.hex(5)}" # 14 chars
       puts "Assigning barcode #{barcode} to #{tape.id}"
       tape.barcode = barcode
       tape.save
