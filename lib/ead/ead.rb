@@ -91,7 +91,7 @@ module EAD
     dates = record.date_expression.split(" and ") rescue []
     dates = dates.map do |d|
       begin
-        Date.parse(d).to_date.to_s
+        Date.parse(d).to_date.to_s if d =~ /\d{4}/
       rescue
         d =~ /^\d{4}\.?/ ? d[0..3] : nil
       end
@@ -107,7 +107,8 @@ module EAD
   end
 
   def self.get_extent_for_record(record)
-    record.extent > 0 ? "#{record.extent.to_s} Videocassettes (#{record.stock})" : "0 Videocassettes"
+    stock = (record.stock and !record.stock.empty?) ? " (#{record.stock})" : ""
+    record.extent > 0 ? "#{record.extent.to_s} Videocassettes#{stock}" : "0 Videocassettes"
   end
 
   def self.get_originations(record)
