@@ -132,7 +132,7 @@ module EAD
       originations.concat interviewees
       originations.concat interviewers
     end
-    originations.uniq { |origination| origination[:name] }
+    originations.uniq { |origination| origination.values_at(:name, :role) }
   end
 
   def self.get_related_materials(record)
