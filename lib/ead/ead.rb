@@ -123,7 +123,7 @@ module EAD
 
     record.interviews.each do |interview|
       interviewees = interview.interviewees.all.map {
-        |i| { type: "persname", name: i[:name], role: "ive", source: "local_mssa" }
+        |i| { type: "persname", name: EAD.redact_name(i[:name]), role: "ive", source: "local_mssa" }
       }
 
       interviewers = interview.interviewers.all.map {
@@ -225,6 +225,15 @@ module EAD
 
   def self.random_id
     SecureRandom.hex
+  end
+
+  def self.redact_name(name)
+    redacted = name
+    if name =~ /,/
+      last_name, rest = name.split(",")
+      redacted = [last_name[0], rest].join(",")
+    end
+    redacted
   end
 
 end

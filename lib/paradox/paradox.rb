@@ -27,7 +27,13 @@ module Paradox
   def self.create_agents(agents)
     agents.each do |agent|
       begin
-        agent[:type].constantize.create!(name: agent[:name])
+        name = agent[:name]
+        # confirmed that names containing "'" do not require conversion
+        if name =~ /,/ and name !~ /('| and | AND )/
+          # we can't titleize De* & Mc* names =(
+          name = name.split('-').map(&:titleize).join('-') unless name =~ /^(De[A-Z]|Mc[A-Z])/
+        end
+        agent[:type].constantize.create!(name: name)
       rescue
         # swallow duplicate agent errors and move along ...
       end
@@ -123,6 +129,7 @@ module Paradox
       interviewer3 = Paradox.lookup_agent(agents, "Interviewer", interview[:interviewer_3])
       interviewer4 = Paradox.lookup_agent(agents, "Interviewer", interview[:interviewer_4])
       interviewers = [interviewer1, interviewer2, interviewer3, interviewer4]
+      # ap interview
       record.interviews.create!({
         interviewees: [ interviewee ],
         interviewers: interviewers.compact,

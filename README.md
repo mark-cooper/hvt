@@ -7,7 +7,13 @@ A micro-app for aggregating data from Paradox db and mrc records.
 - Run mrc to marcxml conversion script.
 - Add mrc records (as individual marcxml) to `db/data`.
 - Load paradox db into MySQL as `paradox`.
-- `UPDATE persdata SET name = 'Unspecified' WHERE name = '';`
+
+```sql
+UPDATE persdata SET name = 'Unspecified' WHERE name = '';
+UPDATE persdata SET name = 'Green, Eileen' WHERE name = 'Green, IIleen';
+UPDATE persdata SET name = 'SMITH, EDYTA' WHERE name = 'SMITH, EDyTA';
+UPDATE persdata SET name = 'Villenberg, Samuel' WHERE name = 'WVillenberg, Samuel';
+```
 
 Test load data:
 
@@ -19,7 +25,7 @@ Test load data:
 
 Loading all data:
 
-```
+```bash
 ./bin/rake db:prepare && \
   ./bin/rake db:populate_from_mrc && \
   ./bin/rake db:populate_from_paradox
