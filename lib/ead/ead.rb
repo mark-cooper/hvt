@@ -128,7 +128,7 @@ module EAD
           name: EAD.redact_name(i[:name]),
           role: "ive",
           source: "local_mssa",
-          authorized_form: i[:name],
+          normal: i[:name],
         }
       }
 
