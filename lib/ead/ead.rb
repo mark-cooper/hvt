@@ -123,7 +123,13 @@ module EAD
 
     record.interviews.each do |interview|
       interviewees = interview.interviewees.all.map {
-        |i| { type: "persname", name: EAD.redact_name(i[:name]), role: "ive", source: "local_mssa" }
+        |i| {
+          type: "persname",
+          name: EAD.redact_name(i[:name]),
+          role: "ive",
+          source: "local_mssa",
+          authorized_form: i[:name],
+        }
       }
 
       interviewers = interview.interviewers.all.map {
