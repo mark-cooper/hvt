@@ -7,6 +7,7 @@ A micro-app for aggregating data from Paradox db and mrc records.
 - Run mrc to marcxml conversion script.
 - Add mrc records (as individual marcxml) to `db/data`.
 - Load paradox db into MySQL as `paradox`.
+- Copy and unzip mediainfo files in `db/mediainfo`.
 
 ```sql
 UPDATE persdata SET name = 'Unspecified' WHERE name = '';
@@ -36,7 +37,8 @@ Loading all data:
 ./bin/rake db:fix_missing_barcodes && \
   ./bin/rake db:normalize_barcodes && \
   ./bin/rake db:set_fake_barcodes && \
-  ./bin/rake db:calculate_extents && \
+  ./bin/rake db:calculate_extents:tapes && \
+  ./bin/rake db:calculate_extents:duration && \
   ./bin/rake db:add_secondary_source[src.txt,"United States Holocaust Memorial Museum"]
 ```
 

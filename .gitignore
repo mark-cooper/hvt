@@ -12,6 +12,7 @@
 /db/*.sqlite3-journal
 /db/data/
 /db/ead/
+/db/mediainfo/
 
 # Ignore all logfiles and tempfiles.
 /log/*

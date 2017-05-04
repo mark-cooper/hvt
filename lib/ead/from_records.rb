@@ -41,6 +41,7 @@ module EAD
           end
 
           c02.add_extent EAD.get_extent_for_record(record)
+          c02.add_extent("#{record.duration} Master Files", "duration", nil) if record.duration
           c02.abstract   = record.abstract if record.abstract
           c02.prefercite = record.citation if record.citation
           c02.add_originations EAD.get_originations(record)

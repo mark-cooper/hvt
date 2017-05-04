@@ -9,7 +9,8 @@
 ./bin/rake db:fix_missing_barcodes && \
   ./bin/rake db:normalize_barcodes && \
   ./bin/rake db:set_fake_barcodes && \
-  ./bin/rake db:calculate_extents && \
+  ./bin/rake db:calculate_extents:tapes && \
+  ./bin/rake db:calculate_extents:duration && \
   ./bin/rake db:add_secondary_source[src.txt,"United States Holocaust Memorial Museum"]
 
 # generating EAD

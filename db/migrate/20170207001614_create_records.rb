@@ -6,6 +6,8 @@ class CreateRecords < ActiveRecord::Migration[5.0]
       t.string     :identifier, unique: true
       # $245[ahc]
       t.string     :title
+      # duration (H/M/S)
+      t.string     :duration
       # 'primary' 'Master Count'
       t.integer    :extent, default: 0
       # $300 [physdesc][extent]
