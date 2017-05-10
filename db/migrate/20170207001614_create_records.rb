@@ -14,6 +14,8 @@ class CreateRecords < ActiveRecord::Migration[5.0]
       t.string     :extent_expression
       # 'primary' 'Master stock'
       t.string     :stock
+      # $260a [place of publication]
+      t.string     :publication_place
       # $260b [origination creator]
       t.string     :primary_source
       # RAKE TASK (txt)

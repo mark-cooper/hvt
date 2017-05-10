@@ -46,6 +46,7 @@ module EAD
         c01.add_extent("#{record.duration} Master Files", "duration", nil) if record.duration
         c01.abstract   = record.abstract if record.abstract
         c01.prefercite = record.citation if record.citation
+        c01.add_odds([{ head: "Place of Recording", p: record.publication_place }]) if record.publication_place
         c01.add_originations EAD.get_originations(record)
         c01.add_related_materials(EAD.get_related_materials(record), false)
         c01.add_authorities EAD.get_all_authorities(record)

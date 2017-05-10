@@ -35,6 +35,7 @@ module MRC
       record.identifier          = MRC.subfield_value_for(r['910'],'b')
       record.title               = MRC.subfield_value_for(r['245'],'a').gsub(/\(HVT-\d+\)/, "").strip
       record.date_expression     = MRC.subfield_value_for(r['245'],'f')
+      record.publication_place   = MRC.subfield_value_for(r['260'],'a')
       record.primary_source      = MRC.subfield_value_for(r['260'],'b')
       record.publication_date    = MRC.subfield_value_for(r['260'],'c')
       record.extent_expression   = MRC.subfields_to_s(r['300'])
