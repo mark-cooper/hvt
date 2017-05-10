@@ -93,7 +93,7 @@ module EAD
       begin
         Date.parse(d).to_date.to_s if d =~ /\d{4}/
       rescue
-        d =~ /^\d{4}\.?/ ? d[0..3] : nil
+        d.scan(/\d{4}/)[0]
       end
     end
     dates = dates.concat(record.interviews.map{ |i|
@@ -183,10 +183,12 @@ module EAD
 
     component.add_extent "#{tapes.count.to_s} Videocassettes (#{tapes[0].format})"
 
-    if tapes[0].date
-      component.add_physfacet_date "Created from #{tapes[0].source}, ", tapes[0].date.to_date.to_s
-    else
-      component.add_physfacet "Created from #{tapes[0].source}."
+    if tapes[0].source
+      if tapes[0].date
+        component.add_physfacet_date "Created from #{tapes[0].source}, ", tapes[0].date.to_date.to_s
+      else
+        component.add_physfacet "Created from #{tapes[0].source}."
+      end
     end
 
     tapes.each do |t|
