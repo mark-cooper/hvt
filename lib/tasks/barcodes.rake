@@ -27,6 +27,7 @@ namespace :db do
       puts "Updating barcode for #{tape.record_id}:#{tape.recording_type}:#{number}:#{barcode}"
       tape.barcode = barcode
       tape.number  = number
+      tape.format  = shared_tape.format
       tape.save
     end
   end
