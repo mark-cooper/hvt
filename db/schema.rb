@@ -103,9 +103,11 @@ ActiveRecord::Schema.define(version: 20170301154547) do
   create_table "records", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "identifier"
     t.string   "title"
+    t.string   "duration"
     t.integer  "extent",                            default: 0
     t.string   "extent_expression"
     t.string   "stock"
+    t.string   "publication_place"
     t.string   "primary_source"
     t.string   "secondary_source"
     t.string   "publication_date"
