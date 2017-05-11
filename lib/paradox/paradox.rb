@@ -98,8 +98,8 @@ module Paradox
 
       Paradox.create_proofs record, proofs, agents
       
-      # create interviews: >= kinda hacky but per request
-      Paradox.create_interviews record, i, agents if record.id >= 8000
+      # create interviews: < kinda hacky but per request
+      Paradox.create_interviews record, i, agents if record.id < 8000
       
       # create tapes
       Paradox.create_tapes record, t
