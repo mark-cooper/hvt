@@ -137,7 +137,7 @@ module EAD
       }
       originations.concat interviewees
       originations.concat interviewers
-    end
+    end if record.id < 8000 # < kinda hacky but per request
     originations.uniq { |origination| origination.values_at(:name, :role) }
   end
 
