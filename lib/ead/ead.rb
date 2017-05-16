@@ -125,7 +125,7 @@ module EAD
       interviewees = interview.interviewees.all.map {
         |i| {
           type: "persname",
-          name: EAD.redact_name(i[:name]),
+          name: "#{EAD.redact_name(i[:name])} (#{i[:id]})",
           role: "ive",
           source: "local_mssa",
           normal: i[:name],
