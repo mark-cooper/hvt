@@ -49,4 +49,10 @@ bundler exec rake ead:from_single
 bundler exec rake ead:from_collection
 ```
 
+Locations:
+
+```
+bundler exec rake db:generate_locations_sql
+```
+
 ---

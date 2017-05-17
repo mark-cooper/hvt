@@ -15,3 +15,6 @@
 
 # generating EAD
 bundler exec rake ead:from_single
+
+# locations
+bundler exec rake db:generate_locations_sql

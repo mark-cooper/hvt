@@ -9,7 +9,7 @@ namespace :db do
       .pluck(:barcode).uniq.map { |b| "('#{b}', 'Library Shelving Facility [LSF]')"}
     
     File.open("locations.sql", "w") do |f|
-      f.puts "DROP TABLE barcode_loc;"
+      f.puts "DROP TABLE IF EXISTS barcode_loc;"
       f.puts "CREATE TEMPORARY TABLE barcode_loc (barcode VARCHAR(255), loc VARCHAR(255));"
       f.puts
       f.puts "INSERT INTO barcode_loc (barcode, loc) VALUES"
@@ -22,8 +22,8 @@ namespace :db do
       f.puts
       f.puts %{
 INSERT INTO top_container_housed_at_rlshp
-  (top_container_id, location_id, jsonmodel_type, status)
-SELECT tc.id, loc.id, 'container_location', 'current'
+  (top_container_id, location_id, jsonmodel_type, status, created_by, last_modified_by, system_mtime, user_mtime)
+SELECT tc.id, loc.id, 'container_location', 'current', 'admin', 'admin', NOW(), NOW()
   FROM barcode_loc bl
   JOIN top_container tc ON tc.barcode = bl.barcode
   JOIN location loc ON loc.title = bl.loc;
