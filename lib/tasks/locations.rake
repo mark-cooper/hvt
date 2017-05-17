@@ -10,7 +10,7 @@ namespace :db do
     
     File.open("locations.sql", "w") do |f|
       f.puts "DROP TABLE IF EXISTS barcode_loc;"
-      f.puts "CREATE TEMPORARY TABLE barcode_loc (barcode VARCHAR(255), loc VARCHAR(255));"
+      f.puts "CREATE TABLE barcode_loc (barcode VARCHAR(255), loc VARCHAR(255));"
       f.puts
       f.puts "INSERT INTO barcode_loc (barcode, loc) VALUES"
       f.puts use_copy_locs.join(",\n")
