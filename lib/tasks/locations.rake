@@ -23,6 +23,15 @@ namespace :db do
       f.puts ";"
       f.puts
       f.puts %{
+# confirm no duplicate barcodes
+SELECT
+  bl.barcode, COUNT(*) as count
+FROM barcode_loc bl
+JOIN top_container tc
+ON bl.barcode = tc.barcode
+GROUP BY bl.barcode
+HAVING count > 1;
+
 UPDATE barcode_loc bl
   JOIN top_container tc ON bl.barcode = tc.barcode
   SET bl.top_container_id = tc.id;
