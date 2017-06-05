@@ -14,8 +14,19 @@ namespace :db do
         ]).references(:tapes)
             .find_each(batch_size: 10).lazy.each do |record|
             extent = 0 # initial extent count for record
-            extent += record.tapes.where(recording_type: 'Master').count
-            extent += record.tapes.where(recording_type: 'Duplicate').count if extent == 0
+            [
+              'Master',
+              'Camera',
+              'Duplicate',
+              'Submaster',
+              'Restoration master',
+              'Restoration submaster',
+              'Licensing copy',
+              'Use copy',
+            ].each do |type|
+              extent += record.tapes.where(recording_type: type).count
+              break unless extent == 0
+            end
             extents[collection] += extent # add to collection extent count
 
             # update our record if extent is different
