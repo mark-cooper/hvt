@@ -20,11 +20,14 @@ module EAD
         gen.unitdate = d rescue nil
       end
 
+      odds = []
+      odds << { "Place of Recording" => record.publication_place } if record.publication_place
+      odds << { "Length of Recording" => record.duration } if record.duration
+
       gen.add_extent EAD.get_extent_for_record(record)
-      gen.add_extent("#{record.duration} Master Files", "duration", nil) if record.duration
       gen.abstract   = record.abstract if record.abstract
       gen.prefercite = record.citation if record.citation
-      gen.add_odds([{ "Place of Recording" => record.publication_place }]) if record.publication_place
+      gen.add_odds odds
       gen.add_originations EAD.get_originations(record)
       gen.add_related_materials(EAD.get_related_materials(record), false)
       gen.add_authorities EAD.get_all_authorities(record)
