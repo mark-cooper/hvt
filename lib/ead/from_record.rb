@@ -9,7 +9,26 @@ module EAD
 
       # record specific
       gen.eadid = "mssa.hvt.#{record.id.to_s.rjust(4, '0')}"
-      gen.set_title record.title
+
+      # TODO: if revisiting refactor into EAD.add_titles(gen, record)
+      if record.title =~ /Holocaust testimony$/
+        gen.set_formal_title "Guide to the #{record.title}"
+        title_parts  = record.title.split(".")
+        if title_parts.count > 1
+          names          = title_parts.shift.split(" ")
+          first_initial  = names.find { |tp| tp.length == 1 }
+          names.delete first_initial
+          reformed_names = "#{first_initial}., #{names.join(' ')}"
+          title_parts.unshift reformed_names
+          filing_title   = title_parts.join(' ').squeeze('  ')
+        else
+          filing_title = record.title
+        end
+        gen.set_filing_title filing_title
+      else
+        gen.set_title record.title
+      end
+
       gen.author = EAD::HVT_AUTHOR
       gen.set_note(EAD::HVT_BIB, "bpg", record.bib_id, " ", "Orbis-bib")
       gen.unitid     = "HVT-#{record.id}"
